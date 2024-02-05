@@ -1,10 +1,3 @@
 ## 基础信息
 
-- version: v4.0.0
-- document: http://eva.adjustrd.com
-- GITEE: https://gitee.com/coderd-repos/eva
-- GITHUB: https://github.com/coderd-repos/eva
-- CODERD: http://coderd.adjustrd.com/template/308/default
-
-## 技术支持
-官方文档：http://eva.adjustrd.com
+本权限基础工程由清华海峡院高端装备技术研究中心与清华海峡院联合研发。详细信息待完善，咱不适用于生产环境，请再稍等几天。
