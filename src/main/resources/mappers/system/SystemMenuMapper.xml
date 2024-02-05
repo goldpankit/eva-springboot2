@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemMenuMapper">
+  <!-- 结果集映射 -->
+  <resultMap
+    id="SystemMenuVO"
+    type="com.eva.dao.system.vo.SystemMenuVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+    <association property="icon" javaType="com.eva.dao.system.vo.SystemMenuVO$Icon" autoMapping="true">
+      <id column="iconId" property="id"/>
+      <result column="iconUri" property="uri"/>
+    </association>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select
+    id="search"
+    parameterType="com.eva.dao.system.dto.QuerySystemMenuDTO"
+    resultMap="SystemMenuVO"
+  >
+    SELECT
+      `menu`.`id`,
+      `menu`.`parent_id`,
+      `menu`.`permission_id`,
+      `menu`.`name`,
+      `menu`.`type`,
+      `menu`.`uri`,
+      `menu`.`remark`,
+      `menu`.`disabled`,
+      `menu`.`sort`,
+      `menu`.`created_at`,
+      `menu`.`updated_at`,
+      `permission`.`code` AS `permission`,
+      `creator`.`id` AS `creatorId`,
+      `creator`.`real_name` AS `creatorRealName`,
+      `updater`.`id` AS `updaterId`,
+      `updater`.`real_name` AS `updaterRealName`,
+      `icon`.`id` AS `iconId`,
+      `icon`.`class_name`,
+      `icon`.`uri` AS `iconUri`,
+      `icon`.`access_type`
+    FROM `system_menu` `menu`
+    LEFT JOIN `system_permission` `permission`
+      ON `permission`.`id` = `menu`.`permission_id`
+      AND `permission`.`deleted` = 0
+    LEFT JOIN `system_menu_icon` `icon`
+      ON `icon`.id = `menu`.`icon_id`
+      AND `icon`.`deleted` = 0
+    INNER JOIN `system_user` `creator`
+      ON `creator`.`id` = menu.`created_by`
+    LEFT JOIN `system_user` `updater`
+      ON `updater`.`id` = menu.`updated_by`
+    <where>
+      AND `menu`.`deleted` = 0
+      <if test="!isSuperAdmin">
+        AND (
+          `menu`.`permission_id` IS NULL
+          <if test="permissionIds.size > 0">
+            OR `menu`.`permission_id` IN
+            <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">
+              #{id}
+            </foreach>
+          </if>
+        )
+      </if>
+    </where>
+    ORDER BY `menu`.`sort`
+  </select>
+
+  <!-- 查询用户菜单列表（左侧菜单） -->
+  <select
+    id="selectUserMenus"
+    parameterType="com.eva.dao.system.dto.QuerySystemMenuDTO"
+    resultMap="SystemMenuVO"
+  >
+    SELECT
+      DISTINCT
+      `menu`.`id`,
+      `menu`.`parent_id`,
+      `menu`.`name`,
+      `menu`.`type`,
+      `menu`.`uri`,
+      `menu`.`remark`,
+      `menu`.`disabled`,
+      `menu`.`sort`,
+      `menu`.`created_at`,
+      `menu`.`updated_at`,
+      `icon`.`id` `iconId`,
+      `icon`.`class_name`,
+      `icon`.`uri` AS `iconUri`,
+      `icon`.`access_type`
+    FROM `system_menu` `menu`
+    LEFT JOIN `system_menu_icon` `icon`
+      ON `icon`.`id` = menu.`icon_id`
+      AND icon.`deleted` = 0
+    <where>
+      AND `menu`.`deleted` = 0
+      AND `menu`.`disabled` = 0
+      <if test="!isSuperAdmin">
+        AND (
+          `menu`.`permission_id` IS NULL
+          <if test="permissionIds.size > 0">
+            OR `menu`.`permission_id` IN
+            <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">
+              #{id}
+            </foreach>
+          </if>
+        )
+      </if>
+    </where>
+    ORDER BY `menu`.`sort`
+  </select>
+</mapper>

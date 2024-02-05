@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemUserMapper">
+  <!-- 结果集映射 -->
+  <resultMap id="SystemUserVO" type="com.eva.dao.system.vo.SystemUserVO" autoMapping="true">
+    <id column="ID" property="id"/>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select id="search" parameterType="com.eva.dao.system.dto.QuerySystemUserDTO" resultMap="SystemUserVO">
+    SELECT
+      DISTINCT
+      `usr`.`id`,
+      `usr`.`birthday`,
+      `usr`.`email`,
+      `usr`.`email_digest`,
+      `usr`.`emp_no`,
+      `usr`.`mobile`,
+      `usr`.`mobile_digest`,
+      `usr`.`avatar`,
+      `usr`.`username`,
+      `usr`.`real_name`,
+      `usr`.`gender`,
+      `usr`.`fixed`,
+      `usr`.`created_at`,
+      `usr`.`updated_at`,
+      `creator`.`id` `creatorId`,
+      `creator`.`real_name` `creatorRealName`,
+      `updater`.`id` `updaterId`,
+      `updater`.`real_name` `updaterRealName`
+    FROM `system_user` `usr`
+    LEFT JOIN `system_user` `creator` ON `creator`.`id` = usr.`created_by`
+    LEFT JOIN `system_user` `updater` ON `updater`.`id` = usr.`updated_by`
+    <where>
+      `usr`.`deleted` = 0
+      <if test="dto.username != null and dto.username != ''">
+        AND `usr`.`username` LIKE CONCAT('%', #{dto.username}, '%')
+      </if>
+      <if test="dto.realName != null and dto.realName != ''">
+        AND `usr`.`real_name` LIKE CONCAT('%', #{dto.realName}, '%')
+      </if>
+      <if test="dto.mobile != null and dto.mobile != ''">
+        AND `usr`.`mobile_digest` LIKE CONCAT('%', #{dto.mobile})
+      </if>
+    </where>
+    ${orderByClause}
+  </select>
+</mapper>

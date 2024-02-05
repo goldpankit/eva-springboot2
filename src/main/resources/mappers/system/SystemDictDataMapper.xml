@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemDictDataMapper">
+  <!-- 结果集映射 -->
+  <resultMap
+    id="SystemDictDataVO"
+    type="com.eva.dao.system.vo.SystemDictDataVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select
+    id="search"
+    parameterType="com.eva.dao.system.dto.QuerySystemDictDataDTO"
+    resultMap="SystemDictDataVO"
+  >
+    SELECT
+      `dict_data`.`id`,
+      `dict_data`.`dict_id`,
+      `dict_data`.`value`,
+      `dict_data`.`label`,
+      `dict_data`.`config`,
+      `dict_data`.`sort`,
+      `dict_data`.`disabled`,
+      `dict_data`.`remark`,
+      `dict_data`.`created_at`,
+      `dict_data`.`updated_at`,
+      `creator`.`id` `creatorId`,
+      `creator`.`real_name` `creatorRealName`,
+      `updater`.`id` `updaterId`,
+      `updater`.`real_name` `updaterRealName`
+    FROM `system_dict_data` `dict_data`
+    LEFT JOIN `system_user` `creator` ON `creator`.`id` = `dict_data`.`created_by`
+    LEFT JOIN `system_user` `updater` ON `updater`.`id` = `dict_data`.`updated_by`
+    <where>
+      `dict_data`.`deleted` = 0
+      <if test="dictId != null">
+        AND `dict_data`.`dict_id` = #{dictId}
+      </if>
+    </where>
+    ORDER BY `dict_data`.`sort`
+  </select>
+</mapper>

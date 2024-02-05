@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemDictMapper">
+  <!-- 结果集映射 -->
+  <resultMap
+    id="SystemDictVO"
+    type="com.eva.dao.system.vo.SystemDictVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+  </resultMap>
+  <resultMap
+    id="SystemDictWithDataVO"
+    type="com.eva.dao.system.vo.SystemDictWithDataVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+    <collection property="dataList" ofType="com.eva.dao.system.model.SystemDictData">
+      <id column="dataId" property="id"/>
+      <result column="dataValue" property="value"/>
+      <result column="dataLabel" property="label"/>
+      <result column="dataConfig" property="config"/>
+    </collection>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select
+    id="search"
+    parameterType="com.eva.dao.system.dto.QuerySystemDictDTO"
+    resultMap="SystemDictVO"
+  >
+    SELECT
+      `dict`.`id`,
+      `dict`.`code`,
+      `dict`.`name`,
+      `dict`.`scope`,
+      `dict`.`remark`,
+      `dict`.`created_at`,
+      `dict`.`updated_at`,
+      `creator`.`id` `creatorId`,
+      `creator`.`real_name` `creatorRealName`,
+      `updater`.`id` `updaterId`,
+      `updater`.`real_name` `updaterRealName`
+    FROM `system_dict` `dict`
+    LEFT JOIN `system_user` `creator`
+      ON `creator`.`id` = `dict`.`created_by`
+    LEFT JOIN `system_user` `updater`
+      ON `updater`.`id` = `dict`.`updated_by`
+    <where>
+      `dict`.`deleted` = 0
+      <if test="dto.code != null and dto.code != ''">
+        AND `dict`.`code` LIKE CONCAT('%', #{dto.code}, '%')
+      </if>
+      <if test="dto.name != null and dto.name != ''">
+        AND `dict`.`name` LIKE CONCAT('%', #{dto.name}, '%')
+      </if>
+      <if test="dto.scope != null and dto.scope != ''">
+        AND `dict`.`scope` = #{dto.scope}
+      </if>
+    </where>
+    ${orderByClause}
+  </select>
+
+  <!-- 查询字典和数据 -->
+  <select
+    id="selectListWithData"
+    resultMap="SystemDictWithDataVO"
+  >
+    SELECT
+      `dict`.`id`,
+      `dict`.`code`,
+      `dict`.`name`,
+      `dict_data`.`id` `dataId`,
+      `dict_data`.`value` `dataValue`,
+      `dict_data`.`label` `dataLabel`,
+      `dict_data`.`config` `dataConfig`
+    FROM `system_dict` `dict`
+    LEFT JOIN `system_dict_data` `dict_data`
+      ON `dict_data`.`dict_id` = `dict`.`id`
+      AND `dict_data`.`deleted` = 0
+    WHERE `dict`.`deleted` = 0
+  </select>
+</mapper>

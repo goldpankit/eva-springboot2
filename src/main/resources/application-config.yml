@@ -1,0 +1,100 @@
+# 应用配置
+app:
+  # 项目名称
+  name: 伊娃
+  # 端口号
+  port: 10010
+  # 版本，用于日志记录系统版本
+  version: 4.0.0
+  # 运行环境，生产环境production，开发环境development
+  env: development
+  # 模式，testing测试模式
+  mode: testing
+  # 日志输出等级
+  logging:
+    level: INFO
+  # 超级管理员角色编码
+  super-admin-role: admin
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/eva4-lower?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: local@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  # 会话配置
+  session:
+    # 会话过期时间(s)
+    expire: 1800
+    # 会话模式
+    # - INTERACTIVE：交互模式，每次访问系统接口，都会自动延长会话过期时间至指定的会话过期时间
+    # - FIXED：固定模式，无论在会话过期时间内是否有访问系统，会话都会在指定的过期时间后失效
+    mode: INTERACTIVE
+    # 会话拦截
+    interceptor:
+      # 被拦截的路径（需要登录才可访问）
+      path-patterns:
+        - /**
+      # 不需要拦截的路径（不需要登录即可访问）
+      exclude-path-patterns:
+        # 系统接口
+        - /system/login
+        - /system/logout
+        - /common/captcha
+        # swagger相关
+        - /auth.html
+        - /lib/**
+        - /doc/**
+        - /doc.html
+        - /webjars/**
+        - /swagger-resources/**
+        - /v2/api-docs/**
+  # 验证码
+  captcha:
+    # 图片验证码
+    image:
+      # 过期时长(s)
+      expire: 300
+  # 安全配置
+  security:
+    # 数据库数据安全配置
+    data:
+      # 密钥，用于数据库数据的加解密
+      key: qklpNODl6JjmgcT+
+      key-len: 128
+      iv: 7rnE4rm3h/hcfqN2
+    # 数据传输安全配置
+    transmission:
+      # 需要进行加密的接口路径
+      path-patterns:
+        - /system/login
+      # 不需要进行加密的接口路径
+      exclude-path-patterns:
+      # 密钥，用于请求和响应时传输参数的加解密，该密钥定义需要定义在前端，容易暴露，需和数据库密钥进行区分
+      key: 2B7E151628AED2A6
+      key-len: 128
+      iv: 3D8A9F0BAC4E7D61
+  # 接口文档配置
+  api-doc:
+    # 是否启用，生产环境建议关闭
+    enabled: true
+    # 访问路径
+    host:
+    # 接口文档名称
+    title: ${app.name}接口文档
+    # 文档描述
+    description: ${app.name}接口文档
+    # 禁用时的重定向地址
+    redirect-uri: /
+  # 跟踪日志
+  trace:
+    # 开启智能跟踪模式
+    smart: true
+    # 排除跟踪的URL正则
+    exclude-patterns:
+      - .+/list[a-zA-Z0-9\-\_]*$
+      - .+/tree[a-zA-Z0-9\-\_]*$
+      - .+/page[a-zA-Z0-9\-\_]*$
+      - .+/all[a-zA-Z0-9\-\_]*$
+      - /swagger-resources.*
+      - /v2/api-docs.*

@@ -1,0 +1,40 @@
+# 服务配置
+server:
+  port: ${app.port}
+
+# Spring配置
+spring:
+  config:
+    # 导入项目配置
+    import: application-config.yml
+  mvc:
+    path-match:
+      # 路径匹配策略，适配swagger
+      matching-strategy: ant_path_matcher
+  # 数据源配置
+  datasource:
+    url: ${app.datasource.url}
+    username: ${app.datasource.username}
+    password: ${app.datasource.password}
+    driver-class-name: ${app.datasource.driver-class-name}
+    type: ${app.datasource.type}
+  # JSON返回配置
+  jackson:
+    # 默认时区
+    time-zone: GMT+8
+    # 默认日期格式化
+    date-format: yyyy/MM/dd HH:mm:ss
+
+# MyBatis配置
+mybatis-plus:
+  mapper-locations: classpath*:/mappers/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 日志配置
+logging:
+  appender: ${app.env}
+  level:
+    root: ${app.logging.level}
+    # 持久层使用DEBUG输出，方便查看SQL
+    com.eva.dao: DEBUG

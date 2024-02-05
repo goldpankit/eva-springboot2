@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>伊娃接口认证</title>
+  <link rel="icon" href="../lib/images/favicon.ico">
+  <link rel="stylesheet" href="../lib/css/element-plus.min.css">
+  <link rel="stylesheet" href="../lib/css/auth.css">
+  <script src="../lib/js/vue.min.js"></script>
+  <script src="../lib/js/element-plus.min.js"></script>
+  <script src="../lib/js/element-plus-icons.min.js"></script>
+  <script src="../lib/js/axios.min.js"></script>
+  <script src="../lib/js/request.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="content-wrap">
+    <h1>伊娃接口文档认证</h1>
+    <div class="tip">
+      <el-icon size="15px" color="#333">
+        <Warning />
+      </el-icon>
+      <p>使用系统用户登录，登录后可访问接口文档进行接口测试！</p>
+    </div>
+    <div class="form-wrap">
+      <el-form :inline="false" ref="form" :model="form" :rules="rules" label-width="100px" size="mini" @submit.native.prevent>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="form.username" size="large" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" size="large" type="password" placeholder="请输入密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="opera">
+        <el-button type="primary" :disabled="isWorking" :loading="isWorking" @click="login">登录</el-button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    const app = Vue.createApp({
+      data() {
+        return {
+          isWorking: false,
+          form: {
+            username: 'admin',
+            password: '123123',
+            code: 'eva',
+            uuid: 'eva'
+          },
+          rules: {
+            username: [
+              { required: true, message: '请输入用户名', trigger: 'blur' }
+            ],
+            password: [
+              { required: true, message: '请输入密码', trigger: 'blur' }
+            ]
+          }
+        }
+      },
+      methods: {
+        // 登录
+        login() {
+          this.$refs.form.validate((valid) => {
+            if (!valid) {
+              return
+            }
+            if (this.isWorking) {
+              return
+            }
+            this.isWorking = true
+            request.post('/system/login', this.form)
+              .then(() => {
+                window.location.href = '../doc.html'
+              })
+              .catch(e => {
+                this.$message.error(e.message)
+              })
+              .finally(() => {
+                this.isWorking = false
+              })
+          })
+        }
+      }
+    })
+    app.use(ElementPlus)
+    for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+      app.component(key, component)
+    }
+    app.mount('#app')
+  })()
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemConfigMapper">
+  <!-- 结果集映射 -->
+  <resultMap
+    id="SystemConfigVO"
+    type="com.eva.dao.system.vo.SystemConfigVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select
+    id="search"
+    parameterType="com.eva.dao.system.dto.QuerySystemConfigDTO"
+    resultMap="SystemConfigVO"
+  >
+    SELECT
+      `config`.`id`,
+      `config`.`permission_id`,
+      `config`.`code`,
+      `config`.`name`,
+      `config`.`value`,
+      `config`.`value_type`,
+      `config`.`scope`,
+      `config`.`remark`,
+      `config`.`created_at`,
+      `config`.`updated_at`,
+      `permission`.`code` AS `permission`,
+      `creator`.`id` AS `creatorId`,
+      `creator`.`real_name` AS `creatorRealName`,
+      `updater`.`id` `updaterId`,
+      `updater`.`real_name` `updaterRealName`
+    FROM `system_config` `config`
+    LEFT JOIN `system_permission` `permission`
+      ON `permission`.`id` = `config`.`permission_id`
+      AND `permission`.`deleted` = 0
+    INNER JOIN `system_user` `creator`
+      ON `creator`.`id` = `config`.`created_by`
+    LEFT JOIN `system_user` `updater`
+      ON `updater`.`id` = `config`.`updated_by`
+    <where>
+      AND `config`.`deleted` = 0
+      <if test="keyword != null and keyword != ''">
+        AND (
+          `config`.`name` LIKE CONCAT('%', #{keyword}, '%')
+          OR `config`.`code` LIKE CONCAT('%', #{keyword}, '%')
+          OR `config`.`value` LIKE CONCAT('%', #{keyword}, '%')
+          OR `config`.`remark` LIKE CONCAT('%', #{keyword}, '%')
+        )
+      </if>
+      <if test="!isSuperAdmin">
+        AND (
+          `config`.`permission_id` IS NULL
+          <if test="permissionIds.size > 0">
+            OR `config`.`permission_id` IN
+            <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">
+              #{id}
+            </foreach>
+          </if>
+          <!-- 可以查看自己创建的配置，避免创建后数据无法查询 -->
+          <if test="loginUserId != null">
+            OR `config`.created_by = #{loginUserId}
+          </if>
+        )
+      </if>
+    </where>
+    ORDER BY `config`.`created_at` DESC
+  </select>
+</mapper>

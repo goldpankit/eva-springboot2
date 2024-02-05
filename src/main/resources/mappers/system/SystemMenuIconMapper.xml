@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eva.dao.system.SystemMenuIconMapper">
+  <!-- 结果集映射 -->
+  <resultMap
+    id="SystemMenuIconVO"
+    type="com.eva.dao.system.vo.SystemMenuIconVO"
+    autoMapping="true"
+  >
+    <id column="id" property="id"/>
+  </resultMap>
+
+  <!-- 搜索 -->
+  <select id="search" parameterType="com.eva.dao.system.dto.QuerySystemMenuIconDTO" resultMap="SystemMenuIconVO">
+    SELECT
+      `icon`.`id`,
+      `icon`.`name`,
+      `icon`.`class_name`,
+      `icon`.`uri`,
+      `icon`.`access_type`,
+      `icon`.`created_at`,
+      `icon`.`updated_at`,
+      `creator`.`id` AS `creatorId`,
+      `creator`.`real_name` AS `creatorRealName`,
+      `updater`.`id` AS `updaterId`,
+      `updater`.`real_name` AS `updaterRealName`
+    FROM `system_menu_icon` `icon`
+    INNER JOIN `system_user` `creator` ON `creator`.`id` = `icon`.`created_by`
+    LEFT JOIN `system_user` `updater` ON `updater`.`id` = `icon`.`updated_by`
+    <where>
+      AND `icon`.`deleted` = 0
+      <if test="name != null and name != ''">
+        AND `icon`.`name` LIKE CONCAT('%', #{name}, '%')
+      </if>
+    </where>
+    ORDER BY `icon`.created_at DESC
+  </select>
+</mapper>
