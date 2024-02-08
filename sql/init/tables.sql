@@ -258,9 +258,9 @@ CREATE TABLE `system_dict_data`
     `remark`     varchar(200)         DEFAULT NULL COMMENT '备注',
     `created_by` int         NOT NULL COMMENT '创建人',
     `created_at` datetime    NOT NULL COMMENT '创建时间',
+    `updated_by` int                  DEFAULT NULL COMMENT '更新人',
     `updated_at` datetime             DEFAULT NULL COMMENT '更新时间',
     `deleted`    tinyint(1)  NOT NULL DEFAULT '0' COMMENT '是否删除',
-    `updated_by` int                  DEFAULT NULL COMMENT '更新人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
