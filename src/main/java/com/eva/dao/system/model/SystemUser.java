@@ -70,8 +70,4 @@ public class SystemUser extends BaseModel {
     @ApiModelProperty(value = "盐")
     private String salt;
 
-    @TableField("`fixed`")
-    @ApiModelProperty(value = "是否为固定用户", hidden = true)
-    private Boolean fixed;
-
 }

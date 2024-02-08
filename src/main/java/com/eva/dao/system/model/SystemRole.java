@@ -32,8 +32,4 @@ public class SystemRole extends BaseModel {
     @ApiModelProperty(value = "角色备注")
     private String remark;
 
-    @TableField("`fixed`")
-    @ApiModelProperty(value = "是否为固定角色", hidden = true)
-    private Boolean fixed;
-
 }
