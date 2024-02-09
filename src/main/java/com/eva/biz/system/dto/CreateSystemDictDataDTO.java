@@ -17,8 +17,11 @@ public class CreateSystemDictDataDTO {
     @ApiModelProperty(value = "数据标签")
     private String label;
 
-    @ApiModelProperty(value = "特殊配置")
+    @ApiModelProperty(value = "其它配置")
     private String config;
+
+    @ApiModelProperty(value = "是否禁用")
+    private Boolean disabled;
 
     @ApiModelProperty(value = "备注")
     private String remark;

@@ -33,7 +33,7 @@ public class SystemDictData extends BaseModel {
     private String label;
 
     @TableField("`config`")
-    @ApiModelProperty(value = "特殊配置")
+    @ApiModelProperty(value = "其它配置")
     private String config;
 
     @TableField("`sort`")

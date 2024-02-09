@@ -253,7 +253,7 @@ CREATE TABLE `system_dict_data`
     `value`      varchar(50) NOT NULL COMMENT '数据值',
     `label`      varchar(50) NOT NULL COMMENT '数据标签',
     `sort`       int         NOT NULL DEFAULT '0' COMMENT '排序',
-    `config`     longtext COMMENT '特殊配置',
+    `config`     longtext COMMENT '其它配置',
     `disabled`   tinyint(1)  NOT NULL DEFAULT '0' COMMENT '是否禁用',
     `remark`     varchar(200)         DEFAULT NULL COMMENT '备注',
     `created_by` int         NOT NULL COMMENT '创建人',
