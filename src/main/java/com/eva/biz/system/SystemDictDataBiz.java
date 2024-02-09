@@ -67,10 +67,15 @@ public class SystemDictDataBiz {
     @Transactional
     public void deleteById (Integer id) {
         AssertUtil.notNull(id, "字典数据ID不能为空");
+        SystemDictData dictData = systemDictDataService.findById(id);
+        if (dictData == null) {
+            return;
+        }
+        AssertUtil.notEmpty(dictData.getDictId(), ResponseStatus.DATA_ERROR);
         // 执行删除
         systemDictDataService.deleteById(id);
         // 调整顺序
-        systemDictDataService.updateSortByDictId(id);
+        systemDictDataService.updateSortByDictId(dictData.getDictId());
     }
 
     /**

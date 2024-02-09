@@ -73,6 +73,7 @@ public class SystemDictDataService extends BaseService<SystemDictData, SystemDic
     public Integer getMaxSort (Integer dictId) {
         SystemDictData queryDto = new SystemDictData();
         queryDto.setDictId(dictId);
-        return (int) this.count(queryDto);
+        long sort = (int) this.count(queryDto);
+        return (int) sort + 1;
     }
 }
