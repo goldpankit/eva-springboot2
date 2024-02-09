@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.eva</groupId>
-  <artifactId>eva</artifactId>
+  <artifactId>webapp</artifactId>
   <version>4.0.0</version>
   <packaging>jar</packaging>
 
-  <name>eva</name>
-  <description>Eva Framework</description>
+  <name>伊娃权限基础工程</name>
+  <description>一套基于SpringBoot 2.x、MyBatis Plus和knife4j等技术的权限管理基础工程，可与任意eva系前端结合使用来完成权限系统的研发。</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>

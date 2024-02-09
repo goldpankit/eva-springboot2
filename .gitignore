@@ -1,11 +1,8 @@
-coderd.json
 target/
 *.iml
-log/
 #idea
 .idea
 *.iws
-*.iml
 *.ipr
 .mvn
 mvnw
@@ -23,3 +20,6 @@ tmp
 # Package Files #
 *.jar
 *.war
+
+# GoldPanKit #
+.kit/translated/

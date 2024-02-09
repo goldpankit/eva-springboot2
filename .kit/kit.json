@@ -1,0 +1,144 @@
+{
+  "name": "eva-springboot",
+  "label": "eva-springboot",
+  "version": "4.0.0.1",
+  "private": false,
+  "receivable": false,
+  "compiler": "freemarker",
+  "repository": "",
+  "branch": "",
+  "supportedDatabases": [
+    "mysql"
+  ],
+  "prices": [
+    {
+      "type": "FREE",
+      "value": 0
+    }
+  ],
+  "builds": [
+    {
+      "name": "创建数据库并初始化表结构",
+      "type": "MySQL",
+      "content": "/sql/init/tables.sql",
+      "contentType": "file"
+    },
+    {
+      "name": "初始化基础数据",
+      "type": "MySQL",
+      "content": "/sql/init/data.sql",
+      "contentType": "file"
+    }
+  ],
+  "unbuilds": [],
+  "variables": [
+    {
+      "id": "3yoxux8zhp8g",
+      "type": "variable",
+      "name": "basePackage",
+      "label": "基础包名",
+      "inputType": "input",
+      "required": true,
+      "hidden": false,
+      "defaultValue": "com.eva4",
+      "compiler": "static",
+      "remark": ""
+    },
+    {
+      "id": "14vyg2rtpd28c",
+      "type": "variable",
+      "name": "basePackagePath",
+      "label": "基础路径",
+      "inputType": "input",
+      "required": true,
+      "hidden": true,
+      "defaultValue": "${basePackage?replace('.', '/')}",
+      "compiler": "freemarker",
+      "remark": ""
+    },
+    {
+      "id": "wu19fr7v2cgg",
+      "type": "variable",
+      "name": "datasource",
+      "label": "数据源",
+      "inputType": "datasource",
+      "required": true,
+      "hidden": false,
+      "defaultValue": "",
+      "compiler": "static",
+      "remark": "选择一个数据源，项目构建完成后将自动为您初始化数据库。"
+    }
+  ],
+  "translator": {
+    "output": ".kit/translated",
+    "settings": [
+      {
+        "name": "#{}表达式处理",
+        "path": ".*\\.xml",
+        "type": "code",
+        "source": "",
+        "target": "",
+        "code": "  if (content == null) {\n    return {filepath: filepath, content: content};\n  }\n  if (fileSetting.compiler === 'static') {\n    return {filepath: filepath, content: content};\n  }\n  if (filepath.split('/').pop() === 'pom.xml') {\n    return {filepath: filepath, content: content};\n  }\n  content = content.replace(/#{/g, '<#noparse>#{</#noparse>')\n  return {filepath: filepath, content: content};"
+      },
+      {
+        "name": "${}表达式处理",
+        "path": ".*",
+        "type": "code",
+        "source": "",
+        "target": "",
+        "code": "  if (content == null) {\n    return {filepath: filepath, content: content};\n  }\n  if (fileSetting.compiler === 'static') {\n    return {filepath: filepath, content: content};\n  }\n  content = content.replace(/\\${/g, '<#noparse>${</#noparse>')\n  content = content.replace(/}/g, '<#noparse>}</#noparse>')\n  return {filepath: filepath, content: content};"
+      },
+      {
+        "name": "文件路径处理",
+        "path": ".*",
+        "type": "pattern",
+        "source": "com/eva",
+        "target": "${basePackagePath}",
+        "code": ""
+      },
+      {
+        "name": "文件中的包名处理",
+        "path": ".*",
+        "type": "pattern",
+        "source": "com\\.eva",
+        "target": "${basePackage}",
+        "code": ""
+      },
+      {
+        "name": "数据库用户名处理",
+        "path": ".*application-config.yml",
+        "type": "pattern",
+        "source": "username: username",
+        "target": "username: ${datasource.username}",
+        "code": ""
+      },
+      {
+        "name": "数据库密码处理",
+        "path": ".*application-config.yml",
+        "type": "pattern",
+        "source": "password: password",
+        "target": "password: ${datasource.password}",
+        "code": ""
+      },
+      {
+        "name": "数据库地址处理",
+        "path": ".*application-config.yml",
+        "type": "pattern",
+        "source": "localhost:3306/eva4",
+        "target": "${datasource.host}:${datasource.port}/${datasource.schema}",
+        "code": ""
+      },
+      {
+        "name": "数据库脚本处理",
+        "path": ".*\\.sql",
+        "type": "pattern",
+        "source": "eva4",
+        "target": "${datasource.schema}",
+        "code": ""
+      }
+    ]
+  },
+  "settings": [],
+  "introduce": "🇨🇳一套基于SpringBoot 2.x、MyBatis Plus和knife4j等技术的权限管理基础工程，可与任意eva系前端结合使用来完成权限系统的研发。",
+  "readme": "Eva4由**GoldPanKit官方研制**，其中Eva3.0已成功上线8000+项目，在4.0之前由「程序员懒猴子」维护，从4.0开始纳入**清华海峡院高端装备技术研究中心**进行整体改造和持续维护。\n\n## 服务介绍\n当前为Eva的Java SpringBoot2版本，持久层采用MyBatis Plus，安装服务时只需要指定「项目基础包名「和「数据源」以及「数据库名称」即可快速构建并自动初始化项目。\n\n## 技术文档\n撰写中\n\n\n## 技术支持\n\n可添加「**小艺**」企业微信，她会邀请您加入技术交流群。添加时请备注「**Eva**」\n<div>\n<img src=\"/remote-api/resource/image?f=b0a226e3-e50b-4450-98ee-f581d365c7c9.png\" width=\"255px\" alt=\"小艺企业微信\"/>\n</div>"
+}

@@ -14,10 +14,10 @@
 
   <!-- 测试/线上环境（通过日期分割日志文件） -->
   <appender name="production" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File>log/eva.log</File>
+    <File>log/webapp.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- 文件名 -->
-      <fileNamePattern>log/eva-%d.%i.log</fileNamePattern>
+      <fileNamePattern>log/webapp-%d.%i.log</fileNamePattern>
       <!-- 日志文件保存期限（单位天） -->
       <maxHistory>30</maxHistory>
       <timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
