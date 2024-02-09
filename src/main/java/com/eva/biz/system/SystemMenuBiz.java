@@ -1,5 +1,6 @@
 package com.eva.biz.system;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.eva.biz.system.dto.CreateSystemMenuDTO;
 import com.eva.biz.system.dto.UpdateSystemMenuDTO;
 import com.eva.core.constants.Constants;
@@ -12,8 +13,10 @@ import com.eva.biz.common.UpdateSortDTO;
 import com.eva.dao.system.SystemMenuMapper;
 import com.eva.dao.system.dto.QuerySystemMenuDTO;
 import com.eva.dao.system.model.SystemMenu;
+import com.eva.dao.system.model.SystemMenuFunc;
 import com.eva.dao.system.vo.SystemMenuVO;
 import com.eva.dao.system.vo.SystemMenuNodeVO;
+import com.eva.service.system.SystemMenuFuncService;
 import com.eva.service.system.SystemMenuService;
 import com.eva.service.system.SystemPermissionService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,6 +45,12 @@ public class SystemMenuBiz {
 
     @Resource
     private SystemPermissionService systemPermissionService;
+
+    @Resource
+    private SystemMenuFuncService systemMenuFuncService;
+
+    @Resource
+    private SystemMenuFuncBiz systemMenuFuncBiz;
 
     /**
      * 创建
@@ -110,8 +120,6 @@ public class SystemMenuBiz {
             newMenu.setId(m.getId());
             // - 保留父菜单ID
             newMenu.setParentId(m.getParentId());
-            // - 保留权限ID
-            newMenu.setPermissionId(m.getPermissionId());
             newMenu.setDeleted(Boolean.TRUE);
             deleteList.add(newMenu);
         }
@@ -119,6 +127,19 @@ public class SystemMenuBiz {
         systemMenuService.updateByIdInBatch(deleteList);
         // 修改兄弟节点排序
         List<SystemMenu> brothers = systemMenuService.findSortedChildrenByParentId(menu.getParentId());
+        // 删除菜单下的功能
+        QueryWrapper<SystemMenuFunc> queryFuncWrapper = new QueryWrapper<>();
+        queryFuncWrapper.lambda()
+                .in(SystemMenuFunc::getMenuId, ids)
+                .eq(SystemMenuFunc::getDeleted, Boolean.FALSE)
+        ;
+        List<SystemMenuFunc> menuFunctions = systemMenuFuncService.findList(queryFuncWrapper);
+        if (!CollectionUtils.isEmpty(menuFunctions)) {
+            systemMenuFuncBiz.deleteByIdInBatch(menuFunctions
+                    .stream()
+                    .map(SystemMenuFunc::getId).collect(Collectors.toList())
+            );
+        }
         systemMenuService.updateSort(brothers);
     }
 
