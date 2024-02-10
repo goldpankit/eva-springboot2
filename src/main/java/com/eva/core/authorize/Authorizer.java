@@ -19,7 +19,7 @@ import java.util.List;
 public final class Authorizer {
 
     // 内置方法列表
-    private final List<Method> innerMethods = new ArrayList<>(4);
+    private final List<Method> innerMethods = new ArrayList<>(5);
 
     public Authorizer() {
         try {

@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
-  "label": "eva-springboot",
-  "version": "4.0.0.1",
+  "label": "Eva4后端Java SpringBoot2版",
+  "version": "4.0.0.2",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
