@@ -1,12 +1,16 @@
 package com.eva.api;
 
+import com.eva.core.constants.Constants;
 import com.eva.core.model.AppConfig;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +48,7 @@ public class BaseController {
      * @param is 输入流
      * @return ByteArrayOutputStream
      */
-    protected ByteArrayOutputStream getOutputStream (InputStream is) throws IOException {
+    protected ByteArrayOutputStream getByteArrayOutputStream(InputStream is) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         byte[] bs = new byte[is.available()];
         int len;
@@ -52,5 +56,21 @@ public class BaseController {
             os.write(bs, 0, len);
         }
         return os;
+    }
+
+    /**
+     * 下载字节流
+     *
+     * @param filename 文件名称
+     * @param baos 字节流
+     * @param response 响应对象
+     */
+    protected void downloadByteArray (String filename, ByteArrayOutputStream baos, HttpServletResponse response) throws IOException{
+        String encodeFileName = URLEncoder.encode(filename, StandardCharsets.UTF_8.toString());
+        response.setHeader("Content-Disposition","attachment;filename=" + encodeFileName);
+        response.setContentType("application/octet-stream");
+        response.setHeader(Constants.HEADER_OPERA_TYPE, "download");
+        response.setHeader(Constants.HEADER_DOWNLOAD_FILENAME, encodeFileName);
+        response.getOutputStream().write(baos.toByteArray());
     }
 }

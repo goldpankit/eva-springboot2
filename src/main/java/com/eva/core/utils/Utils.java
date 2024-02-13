@@ -20,6 +20,11 @@ public final class Utils {
     public static AppConfig AppConfig;
 
     /**
+     * OSS
+     */
+    public static OSSUtil OSS;
+
+    /**
      * 字典
      */
     public static DictUtil Dict;
@@ -97,6 +102,11 @@ public final class Utils {
     @Resource(name = "UtilSession")
     public void setSession(SessionUtil session) {
         Utils.Session = session;
+    }
+
+    @Resource
+    public void setOSS(OSSUtil ossUtil) {
+        Utils.OSS = ossUtil;
     }
 
     @Resource

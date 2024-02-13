@@ -44,6 +44,13 @@ public class AppConfig {
     @ApiModelProperty("会话配置")
     private SessionConfig session;
 
+    @ApiModelProperty("本地文件存储路径")
+    private String localFileDirectory;
+
+    @Resource
+    @ApiModelProperty("OSS配置")
+    private OSSConfig oss;
+
     @Resource
     @ApiModelProperty("验证码配置")
     private Captcha captcha;
@@ -115,6 +122,39 @@ public class AppConfig {
             @ApiModelProperty("排除拦截路径")
             private String[] excludePathPatterns;
         }
+    }
+
+    @Data
+    @Configuration
+    @ConfigurationProperties(prefix = "project.oss", ignoreInvalidFields = true)
+    @ApiModel("OSS配置")
+    public static class OSSConfig {
+
+        @ApiModelProperty("文件访问路径前缀")
+        private String accessPrefix;
+
+        @Resource
+        @ApiModelProperty("阿里云OSS配置")
+        private AliYunOSSConfig aliyun;
+    }
+
+    @Data
+    @Configuration
+    @ConfigurationProperties(prefix = "project.oss.aliyun", ignoreInvalidFields = true)
+    @ApiModel("阿里云OSS配置")
+    public static class AliYunOSSConfig {
+
+        @ApiModelProperty("AccessKeyId")
+        private String accessKeyId;
+
+        @ApiModelProperty("AccessKeySecret")
+        private String accessKeySecret;
+
+        @ApiModelProperty("通用存储空间")
+        private String commonBucketName;
+
+        @ApiModelProperty("Endpoint")
+        private String endpoint;
     }
 
     @Data
