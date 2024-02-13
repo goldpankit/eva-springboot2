@@ -35,7 +35,7 @@ public class OSSFileAccessController extends BaseController {
     @GetMapping("/attach")
     public void downloadFile(
             @RequestParam(name = "f") String fileKey,
-            @RequestParam(name = "fn") String filename,
+            @RequestParam(name = "fn", required = false) String filename,
             HttpServletResponse response) throws IOException {
         InputStream is = Utils.OSS.download(fileKey);
         ByteArrayOutputStream os = this.getByteArrayOutputStream(is);

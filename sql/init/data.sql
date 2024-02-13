@@ -86,6 +86,14 @@ INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`
 INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (65, '退出全屏', 'iconfont icon-exit-fullscreen2', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
 INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (66, '退出全屏', 'iconfont icon-exit-fullscreen1', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
 INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (67, '退出全屏', 'iconfont icon-exit-fullscreen', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (68, '文件', 'iconfont icon-file', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (69, '文件', 'iconfont icon-file1', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (70, 'Word,文档', 'iconfont icon-word', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (71, 'Word,文档', 'iconfont icon-word1', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (72, 'PDF,文档', 'iconfont icon-pdf', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (73, 'PDF,文档', 'iconfont icon-pdf1', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (74, 'Excel,文档', 'iconfont icon-excel', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+INSERT INTO `system_menu_icon` (`id`, `name`, `class_name`, `uri`, `access_type`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (75, 'Excel,文档', 'iconfont icon-excel1', '', 'CLASS', 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
 
 -- ################# 菜单功能 ################ -- 
 -- 用户管理
