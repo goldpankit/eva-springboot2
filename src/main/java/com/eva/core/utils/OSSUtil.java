@@ -190,8 +190,28 @@ public class OSSUtil {
     private String doUpload(String bucket, MultipartFile file, String businessPath) throws IOException {
         String fileId = UUID.randomUUID().toString();
         String fileKey = StringUtils.isBlank(businessPath) ? fileId: (businessPath + "/" + fileId);
+        // 补充文件后缀
+        fileKey += getFileExtension(file);
+        // 执行上传
         aliOSS.upload(bucket, file, fileKey);
         return fileKey;
+    }
+
+    /**
+     * 获取文件后缀
+     *
+     * @param file 文件
+     * @return 文件后缀
+     */
+    private String getFileExtension(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename != null && !originalFilename.isEmpty()) {
+            int dotIndex = originalFilename.lastIndexOf('.');
+            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+                return originalFilename.substring(dotIndex);
+            }
+        }
+        return "";
     }
 
     /**

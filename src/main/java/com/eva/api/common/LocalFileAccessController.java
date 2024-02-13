@@ -17,7 +17,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-@Api(tags = "本地文件")
+@Api(tags = "本地文件访问")
 @Trace(exclude = true)
 @RestController
 @RequestMapping("/resource/local")
