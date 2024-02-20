@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,11 +60,20 @@ public class ShiroCredentialsMatcher extends HashedCredentialsMatcher {
         loginUserInfo.setPermissions(permissionCodes);
         loginUserInfo.setIsSuperAdmin(roleCodes.contains(Utils.AppConfig.getSuperAdminRole()));
         // 设置菜单权限
-        loginUserInfo.setMenuPermissionIds(systemPermissionService.findMenuPermissionIdsByRoleIds(roleIds));
+        loginUserInfo.setMenuPermissionIds(Collections.emptySet());
+        if (!roleIds.isEmpty()) {
+            loginUserInfo.setMenuPermissionIds(systemPermissionService.findMenuPermissionIdsByRoleIds(roleIds));
+        }
         // 设置功能权限
-        loginUserInfo.setMenuFuncPermissionIds(systemPermissionService.findMenuFuncPermissionIdsByRoleIds(roleIds));
+        loginUserInfo.setMenuFuncPermissionIds(Collections.emptySet());
+        if (!roleIds.isEmpty()) {
+            loginUserInfo.setMenuFuncPermissionIds(systemPermissionService.findMenuFuncPermissionIdsByRoleIds(roleIds));
+        }
         // 设置系统配置权限
-        loginUserInfo.setSystemConfigPermissionIds(systemPermissionService.findSystemConfigPermissionIdsByRoleIds(roleIds));
+        loginUserInfo.setSystemConfigPermissionIds(Collections.emptySet());
+        if (!roleIds.isEmpty()) {
+            loginUserInfo.setSystemConfigPermissionIds(systemPermissionService.findSystemConfigPermissionIdsByRoleIds(roleIds));
+        }
         return Boolean.TRUE;
     }
 }

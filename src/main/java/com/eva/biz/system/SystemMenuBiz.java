@@ -238,7 +238,7 @@ public class SystemMenuBiz {
     }
 
     /**
-     * 搜索菜单
+     * 查询菜单管理列表
      *
      * @return 菜单节点列表
      */
@@ -256,7 +256,7 @@ public class SystemMenuBiz {
     }
 
     /**
-     * 查询用户菜单列表
+     * 查询用户左侧菜单列表
      *
      * @return 菜单节点列表
      */

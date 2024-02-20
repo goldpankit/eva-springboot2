@@ -116,7 +116,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
     public int deleteByIdInBatch(Collection<Integer> ids, boolean isPhysical) {
         log.debug("批量{}删除 {}，请求参数: {}", isPhysical ? "物理" : "逻辑", this.getModuleName(), JSON.toJSONString(ids));
         ids = new ArrayList<>(ids);
-        ids.removeIf(id -> id == null);
+        ids.removeIf(Objects::isNull);
         if (CollectionUtils.isEmpty(ids)) {
             return 0;
         }
@@ -309,10 +309,9 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
     public Set<Integer> findIds (QueryWrapper<Model> queryWrapper) {
         queryWrapper.setEntityClass(modelClass);
         queryWrapper.lambda().select(Model::getId);
-        return new LinkedHashSet<>(mapper.selectList(queryWrapper)
+        return mapper.selectList(queryWrapper)
                 .stream()
-                .map(item -> item.getId())
-                .collect(Collectors.toList()));
+                .map(BaseModel::getId).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**

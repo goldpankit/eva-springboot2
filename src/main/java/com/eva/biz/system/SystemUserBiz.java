@@ -1,7 +1,6 @@
 package com.eva.biz.system;
 
 import com.eva.biz.system.dto.*;
-import com.eva.core.constants.Constants;
 import com.eva.core.model.AppConfig;
 import com.eva.core.exception.BusinessException;
 import com.eva.core.constants.ResponseStatus;
@@ -23,7 +22,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

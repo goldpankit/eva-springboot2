@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
   "label": "Eva4后端Java SpringBoot2版",
-  "version": "4.0.0.3",
+  "version": "4.0.0.6",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
@@ -40,7 +40,7 @@
       "inputType": "input",
       "required": true,
       "hidden": false,
-      "defaultValue": "com.eva4",
+      "defaultValue": "com.eva",
       "compiler": "static",
       "remark": ""
     },
@@ -64,7 +64,7 @@
       "inputType": "datasource",
       "required": true,
       "hidden": false,
-      "defaultValue": "43u9kva5ou",
+      "defaultValue": "15fxy34obi",
       "compiler": "static",
       "remark": "选择一个数据源，项目构建完成后将自动为您初始化数据库。"
     }
