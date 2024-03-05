@@ -4,6 +4,7 @@ import com.eva.api.BaseController;
 import com.eva.biz.system.SystemMenuBiz;
 import com.eva.biz.system.dto.CreateSystemMenuDTO;
 import com.eva.biz.system.dto.UpdateSystemMenuDTO;
+import com.eva.biz.system.dto.UpdateSystemMenuStatusDTO;
 import com.eva.core.prevent.PreventRepeat;
 import com.eva.core.authorize.ContainPermissions;
 import com.eva.core.model.ApiResponse;
@@ -59,11 +60,8 @@ public class SystemMenuController extends BaseController {
     @ApiOperation("修改状态")
     @PostMapping("/updateStatus")
     @ContainPermissions("system:menu:update")
-    public ApiResponse<?> updateStatus(@RequestBody UpdateSystemMenuDTO dto) {
-        UpdateSystemMenuDTO newDto = new UpdateSystemMenuDTO();
-        newDto.setId(dto.getId());
-        newDto.setDisabled(dto.getDisabled());
-        systemMenuBiz.updateById(newDto);
+    public ApiResponse<?> updateStatus(@RequestBody UpdateSystemMenuStatusDTO dto) {
+        systemMenuBiz.updateStatus(dto);
         return ApiResponse.success(null);
     }
 

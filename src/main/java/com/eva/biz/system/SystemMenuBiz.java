@@ -3,6 +3,7 @@ package com.eva.biz.system;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.eva.biz.system.dto.CreateSystemMenuDTO;
 import com.eva.biz.system.dto.UpdateSystemMenuDTO;
+import com.eva.biz.system.dto.UpdateSystemMenuStatusDTO;
 import com.eva.core.constants.Constants;
 import com.eva.core.exception.BusinessException;
 import com.eva.core.constants.ResponseStatus;
@@ -204,6 +205,19 @@ public class SystemMenuBiz {
         if (!Objects.equals(dto.getId(), menu.getId())) {
             systemMenuService.updateSortByParentId(menu.getParentId());
         }
+    }
+
+    /**
+     * 修改菜单状态
+     *
+     * @param dto 修改状态参数
+     */
+    public void updateStatus (UpdateSystemMenuStatusDTO dto) {
+        AssertUtil.notEmpty(dto.getId(), "菜单主键不能为空");
+        AssertUtil.notEmpty(dto.getDisabled(), "菜单状态不能为空");
+        SystemMenu newMenu = new SystemMenu();
+        BeanUtils.copyProperties(dto, newMenu);
+        systemMenuService.updateById(newMenu);
     }
 
     /**
