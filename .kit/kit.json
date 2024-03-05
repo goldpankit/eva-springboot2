@@ -40,7 +40,7 @@
       "inputType": "input",
       "required": true,
       "hidden": false,
-      "defaultValue": "com.eva",
+      "defaultValue": "com.qckc.crm",
       "compiler": "static",
       "remark": ""
     },

@@ -215,8 +215,14 @@ public class SystemMenuBiz {
     public void updateStatus (UpdateSystemMenuStatusDTO dto) {
         AssertUtil.notEmpty(dto.getId(), "菜单主键不能为空");
         AssertUtil.notEmpty(dto.getDisabled(), "菜单状态不能为空");
+        // 查询菜单
+        SystemMenu menu = systemMenuService.findById(dto.getId());
         SystemMenu newMenu = new SystemMenu();
         BeanUtils.copyProperties(dto, newMenu);
+        // 保留父级菜单、图标和权限
+        newMenu.setParentId(menu.getParentId());
+        newMenu.setIconId(menu.getIconId());
+        newMenu.setPermissionId(menu.getPermissionId());
         systemMenuService.updateById(newMenu);
     }
 

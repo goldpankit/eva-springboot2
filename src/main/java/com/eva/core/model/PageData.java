@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -28,6 +29,18 @@ public class PageData<T> implements Serializable {
     public PageData(long page, long capacity) {
         this.page = page;
         this.capacity = capacity;
+    }
+
+    /**
+     * 获取空页对象
+     *
+     * @return 分页对象
+     */
+    public static <T> PageData<T> empty () {
+        PageData<T> pageData = new PageData<>(1, 10);
+        pageData.total = 0;
+        pageData.records = Collections.emptyList();
+        return pageData;
     }
 
     /**

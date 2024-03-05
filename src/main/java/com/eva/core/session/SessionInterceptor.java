@@ -29,9 +29,12 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 交互式会话，自动延长会话过期时间
         if ("INTERACTIVE".equals(projectConfig.getSession().getMode())) {
-            Serializable sessionId = Utils.Session.getSessionId();
-            if (sessionId != null) {
-                shiroSessionDAO.relive(Utils.Session.getSessionId());
+            try {
+                Serializable sessionId = Utils.Session.getSessionId();
+                if (sessionId != null) {
+                    shiroSessionDAO.relive(Utils.Session.getSessionId());
+                }
+            } catch (Exception ignore) {
             }
         }
         return Boolean.TRUE;

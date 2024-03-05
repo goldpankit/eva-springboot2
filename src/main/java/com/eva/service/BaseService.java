@@ -3,10 +3,12 @@ package com.eva.service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eva.core.model.PageData;
+import com.eva.core.utils.Utils;
 import com.eva.dao.BaseModel;
 import io.swagger.annotations.ApiModel;
 import lombok.extern.slf4j.Slf4j;
@@ -191,6 +193,17 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
     }
 
     /**
+     * 根据UpdateWrapper更新
+     *
+     * @param updateWrapper UpdateWrapper
+     * @return 影响行数
+     */
+    public int update(UpdateWrapper<Model> updateWrapper) {
+        updateWrapper.setEntityClass(modelClass);
+        return mapper.update(updateWrapper);
+    }
+
+    /**
      * 根据主键更新
      *
      * @param model 实体对象
@@ -296,6 +309,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (!withDeleted) {
             model.setDeleted(Boolean.FALSE);
         }
+        Utils.MP.blankToNull(model);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>(model);
         return this.findIds(queryWrapper);
     }
@@ -335,6 +349,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (!withDeleted) {
             model.setDeleted(Boolean.FALSE);
         }
+        Utils.MP.blankToNull(model);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>(model);
         return this.findOne(queryWrapper);
     }
@@ -371,6 +386,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (!withDeleted) {
             model.setDeleted(Boolean.FALSE);
         }
+        Utils.MP.blankToNull(model);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>(model);
         return this.findFirst(queryWrapper);
     }
@@ -411,6 +427,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (!withDeleted) {
             model.setDeleted(Boolean.FALSE);
         }
+        Utils.MP.blankToNull(model);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>(model);
         return this.findList(queryWrapper);
     }
@@ -471,6 +488,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (!withDeleted) {
             model.setDeleted(Boolean.FALSE);
         }
+        Utils.MP.blankToNull(model);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>(model);
         return this.findPage(pageIndex, capacity, queryWrapper);
     }

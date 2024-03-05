@@ -36,15 +36,12 @@ public final class DictUtil {
      */
     public DictDataCache getDictData (String code, String dataValue) {
         DictCache dictCache = this.getDict(code);
-        if (dictCache == null) {
-            return null;
-        }
         for (DictDataCache dictDataCache : dictCache.getDataList()) {
             if (dictDataCache.getValue().equals(dataValue)) {
                 return dictDataCache;
             }
         }
-        return null;
+        throw new RuntimeException("找不到字典数据，字典编码：" + code + "，数据值：" + dataValue);
     }
 
     /**
