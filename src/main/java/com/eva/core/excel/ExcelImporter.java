@@ -71,17 +71,13 @@ public class ExcelImporter<T> {
                 T instance = modelClass.newInstance();
                 Row row = sheet.getRow(i);
                 // 循环获取单元格信息
-                for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-                    Cell cell = row.getCell(columnIndex);
+                for (ColumnInfo columnInfo : columns) {
+                    Cell cell = row.getCell(columnInfo.getIndex());
                     if (cell == null) {
                         continue;
                     }
                     if (StringUtils.isBlank(cell.toString())) {
                         continue;
-                    }
-                    ColumnInfo columnInfo = columns.get(columnIndex);
-                    if (columnInfo == null) {
-                        break;
                     }
                     // 写入对象属性
                     columnInfo.getField().setAccessible(Boolean.TRUE);
@@ -98,7 +94,7 @@ public class ExcelImporter<T> {
             return callback.callback(data, sync);
         } catch (Exception e) {
             throw new BusinessException(ResponseStatus.IMPORT_EXCEL_ERROR, e);
-        }  finally {
+        } finally {
             if (is != null) {
                 try {
                     is.close();
@@ -157,8 +153,10 @@ public class ExcelImporter<T> {
         // 获取列头
         Row row = sheet.getRow(0);
         List<String> headers = new ArrayList<>();
-        for (int i = 0; i < fields.length; i++) {
+        int i = 0;
+        while (row.getCell(i) != null) {
             headers.add(row.getCell(i).getStringCellValue());
+            i++;
         }
         int index = 0;
         for (Field field : fields) {
@@ -172,12 +170,15 @@ public class ExcelImporter<T> {
                 columnIndex = index;
                 if (StringUtils.isNotBlank(excelColumn.name())) {
                     columnIndex = headers.indexOf(excelColumn.name());
+                    if (columnIndex == -1) {
+                        throw new RuntimeException("找不到配置列'" + excelColumn.name() + "'");
+                    }
                 }
             }
             if (sortedColumns.get(columnIndex) != null) {
                 throw new AnnotationConfigurationException(String.format("导入配置有误，存在冲突的列索引%d", columnIndex));
             }
-            sortedColumns.put(columnIndex, new ColumnInfo(excelColumn, field));
+            sortedColumns.put(columnIndex, new ColumnInfo(columnIndex, excelColumn, field));
             index++;
         }
         return new ArrayList<>(sortedColumns.values());
@@ -208,6 +209,9 @@ public class ExcelImporter<T> {
     @Data
     @AllArgsConstructor
     private static class ColumnInfo {
+
+        // 列索引
+        private Integer index;
 
         // 列配置
         private ExcelImportColumn columnConfig;

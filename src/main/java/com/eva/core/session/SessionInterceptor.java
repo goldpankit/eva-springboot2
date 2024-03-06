@@ -34,7 +34,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if (sessionId != null) {
                     shiroSessionDAO.relive(Utils.Session.getSessionId());
                 }
-            } catch (Exception ignore) {
+            } catch (Exception ignored) {
             }
         }
         return Boolean.TRUE;

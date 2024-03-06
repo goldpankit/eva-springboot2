@@ -256,7 +256,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
         if (withDeleted) {
             return model;
         }
-        if (model != null && model.getDeleted()) {
+        if (model != null && model.getDeleted() != null && model.getDeleted()) {
             return null;
         }
         return model;
