@@ -22,7 +22,7 @@ public final class SessionUtil {
     }
 
     /**
-     * 获得shiro session
+     * 获得session id
      *
      * @return 会话对象
      */
