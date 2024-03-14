@@ -36,7 +36,7 @@ public class OSSUtil {
     /**
      * 上传图片
      *
-     * @param imageFile 文件
+     * @param imageFile 图片文件
      * @return 文件访问路径
      */
     public UploadResult uploadImage(MultipartFile imageFile) {
@@ -46,8 +46,8 @@ public class OSSUtil {
     /**
      * 上传图片
      *
-     * @param imageFile 文件
-     * @param businessPath 业务路径，如使用"avatar"表示用户头像路径，"goods/cover"表示商品封面图片等
+     * @param imageFile 图片文件
+     * @param businessPath 业务路径，如使用"/avatar"表示用户头像路径，"/goods/cover"表示商品封面图片等
      * @return 文件访问路径
      */
     public UploadResult uploadImage(MultipartFile imageFile, String businessPath) {
@@ -57,8 +57,8 @@ public class OSSUtil {
     /**
      * 上传图片
      *
-     * @param imageFile 文件
-     * @param businessPath 业务路径，如使用"avatar"表示用户头像路径，"goods/cover"表示商品封面图片等
+     * @param imageFile 图片文件
+     * @param businessPath 业务路径，如使用"/avatar"表示用户头像路径，"/goods/cover"表示商品封面图片等
      * @return 文件访问路径
      */
     public UploadResult uploadImage(String bucket, MultipartFile imageFile, String businessPath) {
@@ -76,7 +76,7 @@ public class OSSUtil {
                 String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/image?f=" + fileKey;
                 return new UploadResult(imageFile.getOriginalFilename(), fileKey, accessUri);
             }
-            String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/" + businessPath + "?f=" + fileKey;
+            String accessUri = businessPath + "?f=" + fileKey;
             return new UploadResult(imageFile.getOriginalFilename(), fileKey, accessUri);
         } catch (Exception e) {
             log.error("图片上传失败", e);
@@ -98,7 +98,7 @@ public class OSSUtil {
      * 上传文件
      *
      * @param file 文件
-     * @param businessPath 业务路径，如使用"contract"表示合同文件，"contract/attach"表示合同附件
+     * @param businessPath 业务路径，如使用"/contract"表示合同文件，"/contract/attach"表示合同附件
      * @return UploadResult
      */
     public UploadResult upload(MultipartFile file, String businessPath) {
@@ -110,7 +110,7 @@ public class OSSUtil {
      *
      * @param bucket 存储空间名称
      * @param file 文件
-     * @param businessPath 业务路径，如使用"contract"表示合同文件，"contract/attach"表示合同附件
+     * @param businessPath 业务路径，如使用"/contract"表示合同文件，"/contract/attach"表示合同附件
      * @return UploadResult
      */
     public UploadResult upload(String bucket, MultipartFile file, String businessPath) {
@@ -124,7 +124,7 @@ public class OSSUtil {
                 String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/attach?f=" + fileKey;
                 return new UploadResult(file.getOriginalFilename(), fileKey, accessUri);
             }
-            String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/" + businessPath + "?f=" + fileKey;
+            String accessUri = businessPath + "?f=" + fileKey;
             return new UploadResult(file.getOriginalFilename(), fileKey, accessUri);
         } catch (Exception e) {
             log.error("文件上传失败", e);
@@ -155,6 +155,9 @@ public class OSSUtil {
 
     /**
      * 设置文件大小限制
+     *
+     * @param maxSize 最大值（单位M）
+     * @return OSSUtil
      */
     public OSSUtil setMaxSize(int maxSize) {
         this.maxSize.set(maxSize);
@@ -163,33 +166,31 @@ public class OSSUtil {
 
     /**
      * 设置文件类型限制（多个类型使用","隔开，如".jpg,jpeg,.png"）
+     *
+     * @param fileTypes 文件类型
+     * @return OSSUtil
      */
     public OSSUtil setFileTypes (String fileTypes) {
         this.fileTypes.set(fileTypes.split(","));
         return this;
     }
 
-    @Data
-    @ApiModel("上传结果")
-    @AllArgsConstructor
-    public static class UploadResult {
-
-        @ApiModelProperty("源文件名称")
-        private String originalFilename;
-
-        @ApiModelProperty("文件的key")
-        private String fileKey;
-
-        @ApiModelProperty("访问路径/下载路径")
-        private String accessUri;
-    }
-
     /**
      * 执行文件上传
+     *
+     * @param bucket 存储空间名称
+     * @param file 文件
+     * @param directory 在bucket中存储的目录
+     * @return fileKey
      */
-    private String doUpload(String bucket, MultipartFile file, String businessPath) throws IOException {
+    private String doUpload(String bucket, MultipartFile file, String directory) throws IOException {
         String fileId = UUID.randomUUID().toString();
-        String fileKey = StringUtils.isBlank(businessPath) ? fileId: (businessPath + "/" + fileId);
+        String fileKey = fileId;
+        // 指定存储目录
+        if (StringUtils.isNotBlank(directory)) {
+            String directoryPath = directory.startsWith("/") ? directory.substring(1) : directory;
+            fileKey = directoryPath + "/" + fileId;
+        }
         // 补充文件后缀
         fileKey += getFileExtension(file);
         // 执行上传
@@ -216,6 +217,8 @@ public class OSSUtil {
 
     /**
      * 验证文件上传
+     *
+     * @param file 文件
      */
     private void checkUpload(MultipartFile file) {
         try {
@@ -229,13 +232,11 @@ public class OSSUtil {
             if (this.fileTypes.get() != null && this.fileTypes.get().length > 0) {
                 // 获取文件名称
                 String filename = file.getOriginalFilename();
-                if (filename != null) {
-                    filename = filename.toLowerCase();
-                }
                 // 无后缀 && 存在格式限制
-                if (filename == null && this.fileTypes.get().length > 0) {
+                if (filename == null) {
                     throw new BusinessException(ResponseStatus.NOT_ALLOWED.getCode(), "文件格式不正确");
                 }
+                filename = filename.toLowerCase();
                 // 验证是否存在预设的格式
                 boolean isFault = true;
                 for (String fileType: this.fileTypes.get()) {
@@ -253,5 +254,20 @@ public class OSSUtil {
             this.maxSize.set(null);
             this.fileTypes.set(null);
         }
+    }
+
+    @Data
+    @ApiModel("上传结果")
+    @AllArgsConstructor
+    public static class UploadResult {
+
+        @ApiModelProperty("源文件名称")
+        private String originalFilename;
+
+        @ApiModelProperty("文件的key")
+        private String fileKey;
+
+        @ApiModelProperty("访问路径/下载路径")
+        private String accessUri;
     }
 }
