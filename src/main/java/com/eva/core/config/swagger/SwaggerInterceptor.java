@@ -1,11 +1,10 @@
 package com.eva.core.config.swagger;
-import com.eva.core.model.AppConfig;
+import com.eva.core.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,15 +16,12 @@ import java.io.IOException;
 @Component
 public class SwaggerInterceptor implements HandlerInterceptor {
 
-   @Resource
-   private AppConfig projectConfig;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (!projectConfig.getApiDoc().getEnabled()) {
+        if (!Utils.AppConfig.getApiDoc().getEnabled() || Utils.AppConfig.isProductionEnv()) {
             String uri = request.getContextPath();
-            if (StringUtils.isNotBlank(projectConfig.getApiDoc().getRedirectUri()))
-                uri = request.getContextPath() + projectConfig.getApiDoc().getRedirectUri();
+            if (StringUtils.isNotBlank(Utils.AppConfig.getApiDoc().getRedirectUri()))
+                uri = request.getContextPath() + Utils.AppConfig.getApiDoc().getRedirectUri();
             if (StringUtils.isBlank(uri))
                 uri = "/";
             try {

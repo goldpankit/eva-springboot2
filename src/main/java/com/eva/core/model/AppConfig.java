@@ -84,6 +84,15 @@ public class AppConfig {
     }
 
     /**
+     * 判断是否为生产环境
+     *
+     * @return boolean
+     */
+    public boolean isProductionEnv () {
+        return ENV_PRODUCTION.equals(env);
+    }
+
+    /**
      * 判断是否为测试模式，当前测试模式下完成以下事项
      * - 不校验验证码
      *
