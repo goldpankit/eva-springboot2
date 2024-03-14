@@ -99,7 +99,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.session", ignoreInvalidFields = true)
     @ApiModel("会话配置")
     public static class SessionConfig {
 
@@ -126,7 +125,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.oss", ignoreInvalidFields = true)
     @ApiModel("OSS配置")
     public static class OSSConfig {
 
@@ -140,7 +138,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.oss.aliyun", ignoreInvalidFields = true)
     @ApiModel("阿里云OSS配置")
     public static class AliYunOSSConfig {
 
@@ -159,7 +156,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.captcha", ignoreInvalidFields = true)
     @ApiModel("验证码")
     public static class Captcha {
 
@@ -170,7 +166,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.captcha.image", ignoreInvalidFields = true)
     @ApiModel("图片验证码配置")
     public static class ImageCaptchaConfig {
 
@@ -180,7 +175,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.security", ignoreInvalidFields = true)
     @ApiModel("安全配置")
     public static class Security {
 
@@ -195,7 +189,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.security.data", ignoreInvalidFields = true)
     @ApiModel("AES配置")
     public static class AES {
 
@@ -211,7 +204,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.security.transmission", ignoreInvalidFields = true)
     @ApiModel("AES配置")
     public static class SecureTransmission {
 
@@ -233,7 +225,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.api-doc", ignoreInvalidFields = true)
     @ApiModel("接口文档配置")
     public static class ApiDocConfig {
 
@@ -255,7 +246,6 @@ public class AppConfig {
 
     @Data
     @Configuration
-    @ConfigurationProperties(prefix = "project.trace", ignoreInvalidFields = true)
     @ApiModel("跟踪日志配置")
     public static class Trace {
 
