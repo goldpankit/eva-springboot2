@@ -26,30 +26,6 @@ public class AESUtil {
     }
 
     /**
-     * 加密数据
-     *
-     * @return String
-     */
-    public String encryptData(String plainText) throws SecurityException {
-        return this.encrypt(plainText,
-                Utils.AppConfig.getSecurity().getData().getKey(),
-                Utils.AppConfig.getSecurity().getData().getKeyLen(),
-                Utils.AppConfig.getSecurity().getData().getIv());
-    }
-
-    /**
-     * 加密传输参数
-     *
-     * @return String
-     */
-    public String encryptTransmission(String plainText) throws SecurityException {
-        return this.encrypt(plainText,
-                Utils.AppConfig.getSecurity().getTransmission().getKey(),
-                Utils.AppConfig.getSecurity().getTransmission().getKeyLen(),
-                Utils.AppConfig.getSecurity().getTransmission().getIv());
-    }
-
-    /**
      * 加密
      *
      * @param plainText 明文
@@ -72,32 +48,6 @@ public class AESUtil {
     }
 
     /**
-     * 解密传输参数
-     *
-     * @param cipherText 密文
-     * @return String
-     */
-    public String decryptData(String cipherText) throws SecurityException {
-        return this.decrypt(cipherText,
-                Utils.AppConfig.getSecurity().getData().getKey(),
-                Utils.AppConfig.getSecurity().getData().getKeyLen(),
-                Utils.AppConfig.getSecurity().getData().getIv());
-    }
-
-    /**
-     * 解密数据
-     *
-     * @param cipherText 密文
-     * @return String
-     */
-    public String decryptTransmission(String cipherText) throws SecurityException {
-        return this.decrypt(cipherText,
-                Utils.AppConfig.getSecurity().getTransmission().getKey(),
-                Utils.AppConfig.getSecurity().getTransmission().getKeyLen(),
-                Utils.AppConfig.getSecurity().getTransmission().getIv());
-    }
-
-    /**
      * 解密
      *
      * @param cipherText 密文
@@ -117,6 +67,56 @@ public class AESUtil {
         } catch (Exception e) {
             throw new SecurityException("AES decrypt throw an exception", e);
         }
+    }
+
+    /**
+     * 加密数据
+     *
+     * @return String
+     */
+    public String encryptData(String plainText) throws SecurityException {
+        return this.encrypt(plainText,
+                Utils.AppConfig.getSecurity().getData().getKey(),
+                Utils.AppConfig.getSecurity().getData().getKeyLen(),
+                Utils.AppConfig.getSecurity().getData().getIv());
+    }
+
+    /**
+     * 解密传输参数
+     *
+     * @param cipherText 密文
+     * @return String
+     */
+    public String decryptData(String cipherText) throws SecurityException {
+        return this.decrypt(cipherText,
+                Utils.AppConfig.getSecurity().getData().getKey(),
+                Utils.AppConfig.getSecurity().getData().getKeyLen(),
+                Utils.AppConfig.getSecurity().getData().getIv());
+    }
+
+    /**
+     * 加密传输参数
+     *
+     * @return String
+     */
+    public String encryptTransmission(String plainText) throws SecurityException {
+        return this.encrypt(plainText,
+                Utils.AppConfig.getSecurity().getTransmission().getKey(),
+                Utils.AppConfig.getSecurity().getTransmission().getKeyLen(),
+                Utils.AppConfig.getSecurity().getTransmission().getIv());
+    }
+
+    /**
+     * 解密数据
+     *
+     * @param cipherText 密文
+     * @return String
+     */
+    public String decryptTransmission(String cipherText) throws SecurityException {
+        return this.decrypt(cipherText,
+                Utils.AppConfig.getSecurity().getTransmission().getKey(),
+                Utils.AppConfig.getSecurity().getTransmission().getKeyLen(),
+                Utils.AppConfig.getSecurity().getTransmission().getIv());
     }
 
     /**
