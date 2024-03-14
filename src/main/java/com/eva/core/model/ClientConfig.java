@@ -56,6 +56,9 @@ public class ClientConfig {
         @ApiModelProperty("数据名称")
         private String label;
 
+        @ApiModelProperty("其它配置")
+        private String config;
+
         @ApiModelProperty("是否已禁用")
         private Boolean disabled;
     }
