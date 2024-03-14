@@ -17,9 +17,9 @@ public enum ResponseStatus {
     PWD_INCORRECT(4004, "密码不正确"),
     VERIFICATION_CODE_INCORRECT(4005, "验证码不正确或已过期"),
     ACCOUNT_INCORRECT(4006, "账号或密码不正确"),
-    TWO_FA_INCORRECT(4007, "登录密码不正确"),
-    LOCAL_FILE_NOT_EXISTS(4008, "文件不存在"),
-    PRIVILEGE_ERROR(4009, "疑似存在非法权限提升或不是最新数据，请刷新数据后重试"),
+    LOCAL_FILE_NOT_EXISTS(4007, "文件不存在"),
+    PRIVILEGE_ERROR(4008, "疑似存在非法权限提升或不是最新数据，请刷新数据后重试"),
+    TWO_FA_INCORRECT(4009, "登录密码不正确"),
     TWO_FA_REQUIRED(4010, "需要进行2FA认证"),
     TWO_FA_FAILED(4011, "2FA认证失败"),
     // 500开头表示未知的服务异常
