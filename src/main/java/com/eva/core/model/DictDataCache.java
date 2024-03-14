@@ -19,6 +19,6 @@ public class DictDataCache implements Serializable {
     @ApiModelProperty(value = "数据标签")
     private String label;
 
-    @ApiModelProperty(value = "特殊配置")
+    @ApiModelProperty(value = "其它配置")
     private String config;
 }
