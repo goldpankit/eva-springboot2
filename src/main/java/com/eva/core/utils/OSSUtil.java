@@ -70,14 +70,15 @@ public class OSSUtil {
             // 验证文件
             this.checkUpload(imageFile);
             // 执行上传
-            String fileKey = this.doUpload(bucket, imageFile, businessPath);
+            DoUploadResult doUploadResult = this.doUpload(bucket, imageFile, businessPath);
             // 返回上传结果
             if (StringUtils.isBlank(businessPath)) {
-                String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/image?f=" + fileKey;
-                return new UploadResult(imageFile.getOriginalFilename(), fileKey, accessUri);
+                String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/image?f=" + doUploadResult.getFileId();
+                return new UploadResult(imageFile.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
             }
-            String accessUri = businessPath + "?f=" + fileKey;
-            return new UploadResult(imageFile.getOriginalFilename(), fileKey, accessUri);
+            // - 此处直接返回业务路径 + 文件ID，避免业务路径和fileKey重复
+            String accessUri = businessPath + "?f=" + doUploadResult.getFileId();
+            return new UploadResult(imageFile.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
         } catch (Exception e) {
             log.error("图片上传失败", e);
             throw new BusinessException(ResponseStatus.SERVER_ERROR.getCode(), "图片上传失败");
@@ -118,14 +119,14 @@ public class OSSUtil {
             // 验证文件
             this.checkUpload(file);
             // 执行上传
-            String fileKey = this.doUpload(bucket, file, businessPath);
+            DoUploadResult doUploadResult = this.doUpload(bucket, file, businessPath);
             // 返回上传结果
             if (StringUtils.isBlank(businessPath)) {
-                String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/attach?f=" + fileKey;
-                return new UploadResult(file.getOriginalFilename(), fileKey, accessUri);
+                String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/attach?f=" + doUploadResult.getFileId();
+                return new UploadResult(file.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
             }
-            String accessUri = businessPath + "?f=" + fileKey;
-            return new UploadResult(file.getOriginalFilename(), fileKey, accessUri);
+            String accessUri = businessPath + "?f=" + doUploadResult.getFileId();
+            return new UploadResult(file.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
         } catch (Exception e) {
             log.error("文件上传失败", e);
             throw new BusinessException(ResponseStatus.SERVER_ERROR.getCode(), "文件上传失败");
@@ -181,21 +182,19 @@ public class OSSUtil {
      * @param bucket 存储空间名称
      * @param file 文件
      * @param directory 在bucket中存储的目录
-     * @return fileKey
+     * @return fileId
      */
-    private String doUpload(String bucket, MultipartFile file, String directory) throws IOException {
-        String fileId = UUID.randomUUID().toString();
+    private DoUploadResult doUpload(String bucket, MultipartFile file, String directory) throws IOException {
+        String fileId = UUID.randomUUID() + getFileExtension(file);
         String fileKey = fileId;
         // 指定存储目录
         if (StringUtils.isNotBlank(directory)) {
             String directoryPath = directory.startsWith("/") ? directory.substring(1) : directory;
             fileKey = directoryPath + "/" + fileId;
         }
-        // 补充文件后缀
-        fileKey += getFileExtension(file);
         // 执行上传
         aliOSS.upload(bucket, file, fileKey);
-        return fileKey;
+        return new DoUploadResult(fileId, fileKey);
     }
 
     /**
@@ -254,6 +253,18 @@ public class OSSUtil {
             this.maxSize.set(null);
             this.fileTypes.set(null);
         }
+    }
+
+    @Data
+    @ApiModel("上传结果")
+    @AllArgsConstructor
+    private static class DoUploadResult {
+
+        @ApiModelProperty("文件ID")
+        private String fileId;
+
+        @ApiModelProperty("文件key")
+        private String fileKey;
     }
 
     @Data
