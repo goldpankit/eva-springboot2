@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 日期工具
@@ -15,7 +16,7 @@ public final class DateUtil {
      *
      * @return N天前的日期
      */
-    public java.util.Date getBeforeDay (int recentDay) {
+    public Date getBeforeDay (int recentDay) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -recentDay);
         return calendar.getTime();
@@ -25,7 +26,7 @@ public final class DateUtil {
      * 获取昨天
      * @return 昨天
      */
-    public java.util.Date getYesterday() {
+    public Date getYesterday() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
@@ -36,7 +37,7 @@ public final class DateUtil {
      *
      * @return 当月开始时间
      */
-    public java.util.Date getMonthStart () {
+    public Date getMonthStart () {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -51,7 +52,7 @@ public final class DateUtil {
      *
      * @return 当月结束时间
      */
-    public java.util.Date getMonthEnd () {
+    public Date getMonthEnd () {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, 23);
@@ -66,7 +67,7 @@ public final class DateUtil {
      *
      * @return 当年开始时间
      */
-    public java.util.Date getYearStart () {
+    public Date getYearStart () {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, 0);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -82,7 +83,7 @@ public final class DateUtil {
      *
      * @return 当年结束时间
      */
-    public java.util.Date getYearEnd () {
+    public Date getYearEnd () {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, 11);
         calendar.set(Calendar.DAY_OF_MONTH, 31);
@@ -97,9 +98,9 @@ public final class DateUtil {
      * 获取日期的开始时间
      *
      * @param date 日期
-     * @return java.util.Date
+     * @return Date
      */
-    public java.util.Date getStart (java.util.Date date) {
+    public Date getStart (Date date) {
         if (date == null) {
             return null;
         }
@@ -116,9 +117,9 @@ public final class DateUtil {
      * 获取日期的结束时间
      *
      * @param date 日期
-     * @return java.util.Date
+     * @return Date
      */
-    public java.util.Date getEnd (java.util.Date date) {
+    public Date getEnd (Date date) {
         if (date == null) {
             return null;
         }
@@ -137,7 +138,7 @@ public final class DateUtil {
      * @param date 日期
      * @return String
      */
-    public String format (java.util.Date date) {
+    public String format (Date date) {
         if (date == null) {
             return null;
         }
@@ -151,7 +152,7 @@ public final class DateUtil {
      * @param format 格式
      * @return String
      */
-    public String format (java.util.Date date, String format) {
+    public String format (Date date, String format) {
         if (date == null || StringUtils.isBlank(format)) {
             return null;
         }
