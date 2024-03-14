@@ -1,5 +1,6 @@
 package com.eva.core.utils;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +18,7 @@ public class LocationUtil {
     private static final String GET_LOCATION_API = "http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=%s";
 
     /**
-     * 获取地区
+     * 获取地区信息
      *
      * @param ip IP
      * @return Info
@@ -37,7 +38,7 @@ public class LocationUtil {
     }
 
     /**
-     * 获取地区
+     * 获取IP详细地址
      *
      * @param ip IP
      * @return String
@@ -56,15 +57,19 @@ public class LocationUtil {
     @Data
     public static class Info implements Serializable {
 
+        @ApiModelProperty("省")
         private String pro;
 
+        @ApiModelProperty("省编码")
         private String proCode;
 
+        @ApiModelProperty("市")
         private String city;
 
+        @ApiModelProperty("省编码")
         private String cityCode;
 
+        @ApiModelProperty("详细地址")
         private String addr;
-
     }
 }
