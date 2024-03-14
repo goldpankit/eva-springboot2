@@ -18,7 +18,7 @@ public class SwaggerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (!Utils.AppConfig.getApiDoc().getEnabled() || Utils.AppConfig.isProductionEnv()) {
+        if (!Utils.AppConfig.getApiDoc().getEnabled()) {
             String uri = request.getContextPath();
             if (StringUtils.isNotBlank(Utils.AppConfig.getApiDoc().getRedirectUri()))
                 uri = request.getContextPath() + Utils.AppConfig.getApiDoc().getRedirectUri();
