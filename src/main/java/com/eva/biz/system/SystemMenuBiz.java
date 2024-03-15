@@ -416,8 +416,13 @@ public class SystemMenuBiz {
         if (userInfo.getIsSuperAdmin()) {
             return;
         }
-        // 非超级管理员，查看是否存在权限
+        // 非超级管理员
         if (currentMenu.getPermissionId() != null) {
+            // 如果是自己创建的菜单，即使没有权限也可删除
+            if (currentMenu.getCreatedBy().equals(userInfo.getId())) {
+                return;
+            }
+            // 如果不存在该菜单权限，视为越权
             if (!Utils.Session.getLoginUser()
                     .getMenuPermissionIds()
                     .contains(currentMenu.getPermissionId())
