@@ -6,6 +6,7 @@ import com.eva.core.exception.BusinessException;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.AssertUtil;
 import com.eva.core.utils.Utils;
+import com.eva.dao.system.model.SystemMenu;
 import com.eva.service.system.SystemPermissionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -68,6 +69,8 @@ public class SystemMenuFuncBiz {
         if (menuFunc == null) {
             return;
         }
+        // 越权验证
+        this.checkPrivilege(menuFunc);
         // 删除权限
         systemPermissionService.deleteByIdAllowNull(menuFunc.getPermissionId());
         // 执行删除
@@ -109,6 +112,8 @@ public class SystemMenuFuncBiz {
         if (menuFunc == null || menuFunc.getDeleted()) {
             throw new BusinessException(ResponseStatus.DATA_EMPTY);
         }
+        // 越权验证
+        this.checkPrivilege(menuFunc);
         // 执行修改
         SystemMenuFunc newRecord = new SystemMenuFunc();
         BeanUtils.copyProperties(dto, newRecord);
@@ -132,9 +137,37 @@ public class SystemMenuFuncBiz {
         // 获取当前登录用户信息
         LoginUserInfo userInfo = Utils.Session.getLoginUser();
         // 补充权限参数
+        pageWrap.getModel().setUserId(userInfo.getId());
         pageWrap.getModel().setPermissionIds(userInfo.getMenuFuncPermissionIds());
         pageWrap.getModel().setIsSuperAdmin(userInfo.getIsSuperAdmin());
         List<SystemMenuFuncVO> result = systemMenuFuncMapper.search(pageWrap.getModel());
         return PageData.from(new PageInfo<>(result));
+    }
+
+    /**
+     * 越权验证
+     *
+     * @param currentMenuFunc 当前菜单功能
+     */
+    private void checkPrivilege (SystemMenuFunc currentMenuFunc) {
+        LoginUserInfo userInfo = Utils.Session.getLoginUser();
+        // 超级管理员
+        if (userInfo.getIsSuperAdmin()) {
+            return;
+        }
+        // 非超级管理员
+        if (currentMenuFunc.getPermissionId() != null) {
+            // 如果是自己创建的菜单功能，即使没有权限也可删除
+            if (currentMenuFunc.getCreatedBy().equals(userInfo.getId())) {
+                return;
+            }
+            // 如果不存在该菜单功能权限，视为越权
+            if (!Utils.Session.getLoginUser()
+                    .getMenuFuncPermissionIds()
+                    .contains(currentMenuFunc.getPermissionId())
+            ) {
+                throw new BusinessException(ResponseStatus.PRIVILEGE_ERROR);
+            }
+        }
     }
 }

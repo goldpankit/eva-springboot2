@@ -44,7 +44,11 @@
       </if>
       <if test="!isSuperAdmin">
         AND (
+          <!-- 查询无需权限的菜单功能 -->
           `func`.`permission_id` IS NULL
+          <!-- 查询自己创建的菜单功能 -->
+          OR `func`.`created_by` = #{userId}
+          <!-- 查询拥有权限的菜单功能 -->
           <if test="permissionIds.size > 0">
             OR `func`.`permission_id` IN
             <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">
