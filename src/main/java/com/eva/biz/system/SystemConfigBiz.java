@@ -88,9 +88,7 @@ public class SystemConfigBiz {
             return;
         }
         // 越权验证
-        if (!Utils.Session.getLoginUser().getIsSuperAdmin()) {
-            this.checkPrivilege(config);
-        }
+        this.checkPrivilege(config);
         // 删除权限
         systemPermissionService.deleteByIdAllowNull(config.getPermissionId());
         // 执行删除
@@ -127,9 +125,7 @@ public class SystemConfigBiz {
         SystemConfig config = systemConfigService.findById(dto.getId());
         AssertUtil.notNull(config, ResponseStatus.DATA_EMPTY);
         // 越权验证
-        if (!Utils.Session.getLoginUser().getIsSuperAdmin()) {
-            this.checkPrivilege(config);
-        }
+        this.checkPrivilege(config);
         // 验证编码是否已存在
         SystemConfig existsConfig = SystemConfig.builder().id(dto.getId()).code(dto.getCode()).build();
         if (systemConfigService.exists(existsConfig)) {
@@ -190,7 +186,18 @@ public class SystemConfigBiz {
      * @param config 系统配置
      */
     private void checkPrivilege (SystemConfig config) {
+        LoginUserInfo userInfo = Utils.Session.getLoginUser();
+        // 超级管理员
+        if (userInfo.getIsSuperAdmin()) {
+            return;
+        }
+        // 非超级管理员
         if (config.getPermissionId() != null) {
+            // 如果是自己创建的配置，即使没有权限也可删除
+            if (config.getCreatedBy().equals(userInfo.getId())) {
+                return;
+            }
+            // 如果不存在该配置权限，视为越权
             if (!Utils.Session.getLoginUser()
                     .getSystemConfigPermissionIds()
                     .contains(config.getPermissionId())
