@@ -267,6 +267,7 @@ public class SystemMenuBiz {
         LoginUserInfo userInfo = Utils.Session.getLoginUser();
         // 构造查询参数
         QuerySystemMenuDTO queryDto = new QuerySystemMenuDTO();
+        queryDto.setUserId(userInfo.getId());
         queryDto.setPermissionIds(userInfo.getMenuPermissionIds());
         queryDto.setIsSuperAdmin(userInfo.getIsSuperAdmin());
         // 执行查询

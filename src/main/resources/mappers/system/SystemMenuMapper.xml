@@ -56,7 +56,11 @@
       AND `menu`.`deleted` = 0
       <if test="!isSuperAdmin">
         AND (
+          <!-- 查询无需权限的菜单 -->
           `menu`.`permission_id` IS NULL
+          <!-- 查询自己创建的菜单 -->
+          OR `menu`.`created_by` = #{userId}
+          <!-- 查询拥有权限的菜单 -->
           <if test="permissionIds.size > 0">
             OR `menu`.`permission_id` IN
             <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">

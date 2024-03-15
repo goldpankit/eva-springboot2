@@ -11,6 +11,9 @@ import java.util.Set;
 @ApiModel("查询用户菜单参数")
 public class QuerySystemMenuDTO implements Serializable {
 
+    @ApiModelProperty(value = "用户ID", hidden = true)
+    private Integer userId;
+
     @ApiModelProperty(value = "用户菜单权限ID集", hidden = true)
     private Set<Integer> permissionIds;
 
