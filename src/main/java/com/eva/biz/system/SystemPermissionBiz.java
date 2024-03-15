@@ -114,7 +114,7 @@ public class SystemPermissionBiz {
         LoginUserInfo userInfo = Utils.Session.getLoginUser();
         PermissionVO permissionVO = new PermissionVO();
         // 查询菜单权限
-        List<SystemMenuNodeVO> menuNodes = systemMenuBiz.search();
+        List<SystemMenuNodeVO> menuNodes = systemMenuBiz.search(Boolean.FALSE);
         // 查询菜单功能权限
         QuerySystemMenuFuncDTO queryFuncDto = new QuerySystemMenuFuncDTO();
         queryFuncDto.setPermissionIds(userInfo.getMenuFuncPermissionIds());
@@ -125,7 +125,6 @@ public class SystemPermissionBiz {
         QuerySystemConfigDTO queryConfigDto = new QuerySystemConfigDTO();
         queryConfigDto.setIsSuperAdmin(userInfo.getIsSuperAdmin());
         queryConfigDto.setPermissionIds(userInfo.getSystemConfigPermissionIds());
-        queryConfigDto.setLoginUserId(userInfo.getId());
         List<SystemConfigVO> systemConfigs = systemConfigMapper.search(queryConfigDto);
         List<PermissionNodeVO> systemConfigNodes = new ArrayList<>();
         for (SystemConfigVO systemConfig : systemConfigs) {

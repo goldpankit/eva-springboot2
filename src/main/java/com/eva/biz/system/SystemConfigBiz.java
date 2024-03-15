@@ -159,7 +159,7 @@ public class SystemConfigBiz {
         LoginUserInfo userInfo = Utils.Session.getLoginUser();
         pageWrap.getModel().setPermissionIds(userInfo.getSystemConfigPermissionIds());
         pageWrap.getModel().setIsSuperAdmin(userInfo.getIsSuperAdmin());
-        pageWrap.getModel().setLoginUserId(userInfo.getId());
+        pageWrap.getModel().setUserId(userInfo.getId());
         List<SystemConfigVO> result = systemConfigMapper.search(pageWrap.getModel());
         return PageData.from(new PageInfo<>(result));
     }

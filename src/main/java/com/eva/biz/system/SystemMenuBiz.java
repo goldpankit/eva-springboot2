@@ -260,14 +260,17 @@ public class SystemMenuBiz {
     /**
      * 查询菜单管理列表
      *
+     * @param withSelf 是否包含自己创建的菜单
      * @return 菜单节点列表
      */
-    public List<SystemMenuNodeVO> search() {
+    public List<SystemMenuNodeVO> search(boolean withSelf) {
         // 获取当前登录用户信息
         LoginUserInfo userInfo = Utils.Session.getLoginUser();
         // 构造查询参数
         QuerySystemMenuDTO queryDto = new QuerySystemMenuDTO();
-        queryDto.setUserId(userInfo.getId());
+        if (withSelf) {
+            queryDto.setUserId(userInfo.getId());
+        }
         queryDto.setPermissionIds(userInfo.getMenuPermissionIds());
         queryDto.setIsSuperAdmin(userInfo.getIsSuperAdmin());
         // 执行查询

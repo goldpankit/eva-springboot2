@@ -77,7 +77,7 @@ public class SystemMenuController extends BaseController {
     @PostMapping("/all")
     @ContainPermissions("system:menu:query")
     public ApiResponse<List<SystemMenuNodeVO>> findAll () {
-        return ApiResponse.success(systemMenuBiz.search());
+        return ApiResponse.success(systemMenuBiz.search(Boolean.TRUE));
     }
 
 }

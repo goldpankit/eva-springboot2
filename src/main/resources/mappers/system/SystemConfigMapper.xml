@@ -52,16 +52,18 @@
       </if>
       <if test="!isSuperAdmin">
         AND (
+          <!-- 查询无需权限的配置 -->
           `config`.`permission_id` IS NULL
+          <!-- 查询自己创建的配置 -->
+          <if test="userId != null">
+            OR `config`.created_by = #{userId}
+          </if>
+          <!-- 查询拥有权限的配置 -->
           <if test="permissionIds.size > 0">
             OR `config`.`permission_id` IN
             <foreach collection="permissionIds" item="id" open="(" close=")" separator=",">
               #{id}
             </foreach>
-          </if>
-          <!-- 可以查看自己创建的配置，避免创建后数据无法查询 -->
-          <if test="loginUserId != null">
-            OR `config`.created_by = #{loginUserId}
           </if>
         )
       </if>
