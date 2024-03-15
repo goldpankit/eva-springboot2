@@ -149,13 +149,13 @@ public class SystemPermissionBiz {
      * @param loginUser 当前登录的用户
      */
     private void checkPrivilege (ConfigPermissionsDTO dto, LoginUserInfo loginUser) {
-        if (!loginUser.getMenuPermissionIds().containsAll(dto.getMenuPermissionIds())) {
+        if (dto.getMenuPermissionIds() != null && !loginUser.getMenuPermissionIds().containsAll(dto.getMenuPermissionIds())) {
             throw new BusinessException(ResponseStatus.PRIVILEGE_ERROR);
         }
-        if (!loginUser.getMenuFuncPermissionIds().containsAll(dto.getFuncPermissionIds())) {
+        if (dto.getFuncPermissionIds() != null && !loginUser.getMenuFuncPermissionIds().containsAll(dto.getFuncPermissionIds())) {
             throw new BusinessException(ResponseStatus.PRIVILEGE_ERROR);
         }
-        if (!loginUser.getSystemConfigPermissionIds().containsAll(dto.getSystemConfigPermissionIds())) {
+        if (dto.getSystemConfigPermissionIds() != null && !loginUser.getSystemConfigPermissionIds().containsAll(dto.getSystemConfigPermissionIds())) {
             throw new BusinessException(ResponseStatus.PRIVILEGE_ERROR);
         }
     }
