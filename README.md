@@ -2,10 +2,12 @@
 
 本权限基础工程由清华海峡院高端装备技术研究中心与清华海峡院联合研发。旨在作为一套标准化的网站后台、内部系统的后端基础工程，可与其他Eva系的前端基础工程自由搭配来完成一整个项目的研发。
 
-## 在线演示
+## 在线演示 & 技术文档
 - 演示地址：http://online-v4.eva.adjustrd.com/
 - 接口文档：http://online-v4.eva.adjustrd.com/api/doc/auth.html
-- 超级管理员账号：admin/123123
+- 技术文档：http://v4.eva.adjustrd.com/
+
+超级管理员账号：admin/123123
 
 ## 项目特点
 1. 可切换的技术栈，开源版本默认采用SpringBoot2 + Shiro + MyBatis Plus实现，使用GoldPanKit可以进行权限框架、文件上传、缓存等技术栈的切换或扩展。
