@@ -6,7 +6,6 @@ import com.eva.core.exception.BusinessException;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.AssertUtil;
 import com.eva.core.utils.Utils;
-import com.eva.dao.system.model.SystemMenu;
 import com.eva.service.system.SystemPermissionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
