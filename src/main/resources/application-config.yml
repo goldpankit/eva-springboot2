@@ -18,8 +18,8 @@ app:
   # 数据源配置
   datasource:
     url: jdbc:mysql://localhost:3306/eva4?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=GMT%2B8
-    username: root
-    password: local@123
+    username: username
+    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   # 会话配置
