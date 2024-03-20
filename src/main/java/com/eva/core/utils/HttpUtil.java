@@ -139,7 +139,7 @@ public class HttpUtil {
             OutputStreamWriter streamWriter = null;
             try {
                 connection.setRequestMethod(HttpMethod.POST.toString());
-                if (StringUtils.isBlank(params)) {
+                if (StringUtils.isNotBlank(params)) {
                     connection.setDoInput(Boolean.TRUE);
                     connection.setDoOutput(Boolean.TRUE);
                     streamWriter = new OutputStreamWriter(connection.getOutputStream(), charset);
