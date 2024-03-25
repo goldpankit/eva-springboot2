@@ -78,8 +78,20 @@ public class CacheProxy<K,V> {
      * 刷新缓存
      *
      * @param key 缓存键
+     * @param expire 过期时间(s)
      */
-    public void relive(K key) {
+    public void relive(K key, int expire) {
+        log.debug("刷新缓存, key = [{}]", key);
+        localCache.relive(key);
+    }
+
+    /**
+     * 刷新缓存
+     *
+     * @param key 缓存键
+     * @param expire 过期时间(ms)
+     */
+    public void relive(K key, long expire) {
         log.debug("刷新缓存, key = [{}]", key);
         localCache.relive(key);
     }

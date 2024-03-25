@@ -50,7 +50,7 @@ public class ShiroCache implements Cache<Object, Serializable> {
         if (key == null) {
             return;
         }
-        cacheProxy.relive(getKey(key));
+        cacheProxy.relive(getKey(key), Utils.AppConfig.getSession().getExpire());
     }
 
     @Override
