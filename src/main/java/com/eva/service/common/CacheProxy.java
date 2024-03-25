@@ -68,7 +68,7 @@ public class CacheProxy<K,V> {
     public V put(K key, V value, long expire) throws CacheException {
         log.debug("写入缓存, key = [{}]，超时时间 = {}ms", key, expire);
         if (key == null) {
-            log.warn("CacheProxy: put, key can not be null");
+            throw new NullPointerException("缓存Key不能为null");
         }
         localCache.put(key, value, expire);
         return value;
@@ -81,8 +81,7 @@ public class CacheProxy<K,V> {
      * @param expire 过期时间(s)
      */
     public void relive(K key, int expire) {
-        log.debug("刷新缓存, key = [{}]", key);
-        localCache.relive(key);
+        this.relive(key, expire * 1000L);
     }
 
     /**
