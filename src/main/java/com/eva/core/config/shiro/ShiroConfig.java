@@ -31,9 +31,6 @@ public class ShiroConfig {
     private ShiroSessionDAO shiroSessionDAO;
 
     @Resource
-    private ShiroCacheManager shiroCacheManager;
-
-    @Resource
     private ShiroRealm shiroRealm;
 
     @Bean
@@ -55,7 +52,6 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm);
         securityManager.setSessionManager(this.sessionManager());
-        securityManager.setCacheManager(shiroCacheManager);
         return securityManager;
     }
 
