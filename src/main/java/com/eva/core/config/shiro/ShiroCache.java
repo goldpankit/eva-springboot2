@@ -42,7 +42,14 @@ public class ShiroCache implements Cache<Object, Serializable> {
         if (key == null) {
             return null;
         }
-        cacheProxy.put(getKey(key), value, Utils.AppConfig.getSession().getExpire());
+        // 如果没有会话，则新增
+        if (this.get(key) == null) {
+            cacheProxy.put(getKey(key), value, Utils.AppConfig.getSession().getExpire());
+        }
+        // 如果存在会话，在延长会话时长
+        else {
+            this.relive(key);
+        }
         return value;
     }
 

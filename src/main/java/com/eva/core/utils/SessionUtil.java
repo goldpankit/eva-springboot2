@@ -1,4 +1,4 @@
-package com.eva.core.session;
+package com.eva.core.utils;
 
 import com.eva.core.model.LoginUserInfo;
 import org.apache.shiro.SecurityUtils;

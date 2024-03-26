@@ -1,11 +1,13 @@
 package com.eva.core.config.shiro;
 
+import com.eva.core.utils.Utils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,6 +22,7 @@ import java.util.*;
 @Component
 public class ShiroSessionDAO implements SessionDAO {
 
+    @Lazy
     @Resource
     private ShiroCache shiroCache;
 
@@ -56,6 +59,11 @@ public class ShiroSessionDAO implements SessionDAO {
 
     @Override
     public void update(Session session) throws UnknownSessionException {
+        // 固定模式，不更新session
+        if ("FIXED".equals(Utils.AppConfig.getSession().getMode())) {
+            return;
+        }
+        // 存储或延长Session时长
         this.saveSession(session);
     }
 
@@ -87,10 +95,7 @@ public class ShiroSessionDAO implements SessionDAO {
         if (session == null || session.getId() == null) {
             throw new UnknownSessionException("保存会话失败：会话为null或会话id为null");
         }
-        Serializable cacheKey = session.getId();
-        if (shiroCache.get(cacheKey) == null) {
-            shiroCache.put(cacheKey, (SimpleSession) session);
-        }
+        shiroCache.put(session.getId(), (SimpleSession) session);
     }
 
     /**
@@ -106,15 +111,5 @@ public class ShiroSessionDAO implements SessionDAO {
             session = (Session)shiroCache.get(sessionId);
         }
         return session;
-    }
-
-    /**
-     * 重置会话时长
-     *
-     * @param sessionId 会话ID
-     */
-    public void relive(Serializable sessionId) {
-        log.debug("重置会话过期时长. 会话id = {}", sessionId);
-        shiroCache.relive(sessionId);
     }
 }

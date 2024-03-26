@@ -3,7 +3,6 @@ package com.eva.core.utils;
 import com.eva.core.model.AppConfig;
 import com.eva.core.secure.AESUtil;
 import com.eva.core.secure.SecureUtil;
-import com.eva.core.session.SessionUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
