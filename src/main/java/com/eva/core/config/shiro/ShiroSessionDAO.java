@@ -59,11 +59,6 @@ public class ShiroSessionDAO implements SessionDAO {
 
     @Override
     public void update(Session session) throws UnknownSessionException {
-        // 固定模式，不更新session
-        if ("FIXED".equals(Utils.AppConfig.getSession().getMode())) {
-            return;
-        }
-        // 存储或延长Session时长
         this.saveSession(session);
     }
 

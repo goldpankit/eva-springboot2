@@ -64,8 +64,10 @@ public class ShiroConfig {
         for (String pattern : projectConfig.getSession().getInterceptor().getExcludePathPatterns()) {
             map.put(pattern, "anon");
         }
-        // 其他接口统一拦截
-        map.put("/**", "authc");
+        // 需要认证的接口
+        for (String pattern : projectConfig.getSession().getInterceptor().getPathPatterns()) {
+            map.put(pattern, "authc");
+        }
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         // 添加认证过滤器
         Map<String, Filter> filters = new LinkedHashMap<>();
