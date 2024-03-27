@@ -71,11 +71,13 @@ public class SystemLoginBiz {
             systemLoginLogService.create(loginLog);
             return (String)subject.getSession().getId();
         } catch (AuthenticationException e) {
-            log.error(ResponseStatus.ACCOUNT_INCORRECT.getMessage(), e);
             loginLog.setReason(e.getMessage().length() > 200 ? (e.getMessage().substring(0, 190) + "...") : e.getMessage());
             loginLog.setSuccess(Boolean.FALSE);
             systemLoginLogService.create(loginLog);
-            throw new BusinessException(ResponseStatus.ACCOUNT_INCORRECT, e);
+            if (e.getCause() instanceof BusinessException) {
+                throw (BusinessException) e.getCause();
+            }
+            throw new BusinessException(ResponseStatus.ACCOUNT_INCORRECT);
         }
     }
 }
