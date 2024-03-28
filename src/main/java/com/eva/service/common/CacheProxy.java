@@ -2,9 +2,8 @@ package com.eva.service.common;
 
 import com.eva.core.cache.LocalCache;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.cache.CacheException;
-import org.apache.shiro.util.CollectionUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -25,7 +24,7 @@ public class CacheProxy<K,V> {
      * @param key 缓存键
      * @return V
      */
-    public V get(K key) throws CacheException {
+    public V get(K key) {
         if (key == null) {
             return null;
         }
@@ -39,7 +38,7 @@ public class CacheProxy<K,V> {
      * @param value 缓存值
      * @return V
      */
-    public V put(K key, V value) throws CacheException {
+    public V put(K key, V value) {
         localCache.put(key, value);
         return value;
     }
@@ -52,7 +51,7 @@ public class CacheProxy<K,V> {
      * @param expire 过期时间(s)
      * @return V
      */
-    public V put(K key, V value, int expire) throws CacheException {
+    public V put(K key, V value, int expire) {
         localCache.put(key, value, expire * 1000L);
         return value;
     }
@@ -65,7 +64,7 @@ public class CacheProxy<K,V> {
      * @param expire 过期时间(ms)
      * @return V
      */
-    public V put(K key, V value, long expire) throws CacheException {
+    public V put(K key, V value, long expire) {
         log.debug("写入缓存, key = [{}]，超时时间 = {}ms", key, expire);
         if (key == null) {
             throw new NullPointerException("缓存Key不能为null");
@@ -98,7 +97,7 @@ public class CacheProxy<K,V> {
     /**
      * 清理缓存
      */
-    public void clear() throws CacheException {
+    public void clear() {
         log.debug("清理缓存");
         localCache.clear();
     }
@@ -149,7 +148,7 @@ public class CacheProxy<K,V> {
      *
      * @param key 缓存键
      */
-    public void remove(K key) throws CacheException {
+    public void remove(K key) {
         log.debug("删除缓存, key = [{}]", key);
         if (key == null) {
             return;

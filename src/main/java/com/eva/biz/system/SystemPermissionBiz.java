@@ -73,7 +73,7 @@ public class SystemPermissionBiz {
         if (dto.getMenuPermissionIds() != null) {
             // 删除菜单权限
             Set<Integer> menuPermissionIds = systemPermissionService
-                    .findMenuPermissionIdsByRoleIds(Collections.singletonList(dto.getRoleId()));
+                    .findMenuPermissionIdsByRoleIds(Collections.singleton(dto.getRoleId()));
             systemRolePermissionService.deleteByPermissionIds(dto.getRoleId(), menuPermissionIds);
             // 补充菜单权限
             newPermissionIds.addAll(dto.getMenuPermissionIds());
@@ -81,7 +81,7 @@ public class SystemPermissionBiz {
         if (dto.getFuncPermissionIds() != null) {
             // 删除菜单功能权限
             Set<Integer> menuFuncPermissionIds = systemPermissionService
-                    .findMenuFuncPermissionIdsByRoleIds(Collections.singletonList(dto.getRoleId()));
+                    .findMenuFuncPermissionIdsByRoleIds(Collections.singleton(dto.getRoleId()));
             systemRolePermissionService.deleteByPermissionIds(dto.getRoleId(), menuFuncPermissionIds);
             // 补充菜单功能权限
             newPermissionIds.addAll(dto.getFuncPermissionIds());
@@ -89,7 +89,7 @@ public class SystemPermissionBiz {
         if (dto.getSystemConfigPermissionIds() != null) {
             // 删除系统配置项权限
             Set<Integer> systemConfigPermissionIds = systemPermissionService
-                    .findSystemConfigPermissionIdsByRoleIds(Collections.singletonList(dto.getRoleId()));
+                    .findSystemConfigPermissionIdsByRoleIds(Collections.singleton(dto.getRoleId()));
             systemRolePermissionService.deleteByPermissionIds(dto.getRoleId(), systemConfigPermissionIds);
             // 补充系统配置项权限
             newPermissionIds.addAll(dto.getSystemConfigPermissionIds());

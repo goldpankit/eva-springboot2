@@ -131,7 +131,7 @@ public class SystemPermissionService extends BaseService<SystemPermission, Syste
      * @param roleIds 角色ID集
      * @return 菜单权限ID列表
      */
-    public Set<Integer> findMenuPermissionIdsByRoleIds(List<Integer> roleIds) {
+    public Set<Integer> findMenuPermissionIdsByRoleIds(Set<Integer> roleIds) {
         return new HashSet<>(mapper.selectMenuPermissionIdsByRoleIds(roleIds));
     }
 
@@ -141,7 +141,7 @@ public class SystemPermissionService extends BaseService<SystemPermission, Syste
      * @param roleIds 角色ID集
      * @return 菜单功能权限ID列表
      */
-    public Set<Integer> findMenuFuncPermissionIdsByRoleIds(List<Integer> roleIds) {
+    public Set<Integer> findMenuFuncPermissionIdsByRoleIds(Set<Integer> roleIds) {
         return new HashSet<>(mapper.selectMenuFuncPermissionIdsByRoleIds(roleIds));
     }
 
@@ -151,7 +151,7 @@ public class SystemPermissionService extends BaseService<SystemPermission, Syste
      * @param roleIds 角色ID集
      * @return 系统配置权限ID集合
      */
-    public Set<Integer> findSystemConfigPermissionIdsByRoleIds(List<Integer> roleIds) {
+    public Set<Integer> findSystemConfigPermissionIdsByRoleIds(Set<Integer> roleIds) {
         return new HashSet<>(mapper.selectSystemConfigPermissionIdsByRoleIds(roleIds));
     }
 }

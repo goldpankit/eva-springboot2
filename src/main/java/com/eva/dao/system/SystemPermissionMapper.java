@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public interface SystemPermissionMapper extends BaseMapper<SystemPermission> {
@@ -32,7 +33,7 @@ public interface SystemPermissionMapper extends BaseMapper<SystemPermission> {
      * @param roleIds 角色ID集
      * @return 菜单权限ID集
      */
-    List<Integer> selectMenuPermissionIdsByRoleIds(@Param("roleIds") List<Integer> roleIds);
+    List<Integer> selectMenuPermissionIdsByRoleIds(@Param("roleIds") Set<Integer> roleIds);
 
     /**
      * 根据角色ID集查询功能权限ID集
@@ -40,7 +41,7 @@ public interface SystemPermissionMapper extends BaseMapper<SystemPermission> {
      * @param roleIds 角色ID集
      * @return 功能权限ID集
      */
-    List<Integer> selectMenuFuncPermissionIdsByRoleIds(@Param("roleIds") List<Integer> roleIds);
+    List<Integer> selectMenuFuncPermissionIdsByRoleIds(@Param("roleIds") Set<Integer> roleIds);
 
     /**
      * 根据角色ID集查询系统配置权限ID集
@@ -48,6 +49,6 @@ public interface SystemPermissionMapper extends BaseMapper<SystemPermission> {
      * @param roleIds 角色ID集
      * @return 系统配置权限ID集
      */
-    List<Integer> selectSystemConfigPermissionIdsByRoleIds(@Param("roleIds") List<Integer> roleIds);
+    List<Integer> selectSystemConfigPermissionIdsByRoleIds(@Param("roleIds") Set<Integer> roleIds);
 
 }

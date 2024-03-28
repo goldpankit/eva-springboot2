@@ -4,8 +4,6 @@ import com.eva.core.model.LoginUserInfo;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-
 /**
  * 会话工具类
  */
@@ -21,16 +19,4 @@ public final class SessionUtil {
         return (LoginUserInfo) SecurityUtils.getSubject().getPrincipal();
     }
 
-    /**
-     * 获得session id
-     *
-     * @return 会话对象
-     */
-    public Serializable getSessionId () {
-        org.apache.shiro.session.Session session = SecurityUtils.getSubject().getSession();
-        if (session == null) {
-            return null;
-        }
-        return session.getId();
-    }
 }

@@ -5,6 +5,7 @@ import com.eva.core.model.ApiResponse;
 import com.eva.core.constants.ResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,8 +33,8 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(UnauthorizedException.class)
     public Object handleUnauthorizedException (UnauthorizedException e) {
-        log.error(e.getMessage(), e);
-        return ApiResponse.failed("没有操作权限");
+        log.error(e.getMessage());
+        return ApiResponse.failed(HttpStatus.FORBIDDEN.value(), "您当前账号没有该权限，请联系管理员授权！");
     }
 
     /**
@@ -41,7 +42,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Object handleMissingServletRequestParameterException (MissingServletRequestParameterException e) {
-        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
         return ApiResponse.failed(ResponseStatus.BAD_REQUEST.getCode(), e.getMessage());
     }
 

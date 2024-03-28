@@ -1,5 +1,6 @@
 package com.eva.core.config.shiro;
 
+import com.eva.service.system.LoginTokenService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
@@ -26,14 +27,14 @@ public class ShiroSessionDAO implements SessionDAO {
     private ShiroCache shiroCache;
 
     @Resource
-    private ShiroTokenManager shiroTokenManager;
+    private LoginTokenService loginTokenService;
 
     @Override
     public Serializable create(Session session) {
         if (session == null) {
             throw new UnknownSessionException("创建会话失败：session为null");
         }
-        Serializable sessionId = shiroTokenManager.build();
+        Serializable sessionId = loginTokenService.generate();
         ((SimpleSession)session).setId(sessionId);
         this.saveSession(session);
         return sessionId;
@@ -47,7 +48,7 @@ public class ShiroSessionDAO implements SessionDAO {
         }
         if (sessionId instanceof String) {
             // 对SessionId进行验证（可用于防止Session捕获、暴力捕捉等一系列安全问题，最终安全性取决于check如何实现）
-            shiroTokenManager.check((String) sessionId);
+            loginTokenService.check((String) sessionId);
         }
         Session session = getSession(sessionId);
         if (session == null) {

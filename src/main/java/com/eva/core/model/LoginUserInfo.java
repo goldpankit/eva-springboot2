@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,10 +35,10 @@ public class LoginUserInfo implements Serializable {
     private String gender;
 
     @ApiModelProperty("角色标识符集")
-    private List<String> roles;
+    private Set<String> roles;
 
     @ApiModelProperty("权限标识符集")
-    private List<String> permissions;
+    private Set<String> permissions;
 
     @ApiModelProperty("是否为超级管理员")
     private Boolean isSuperAdmin;
