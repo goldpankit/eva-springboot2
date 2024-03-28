@@ -1,6 +1,5 @@
 package com.eva.biz.system;
 
-import com.eva.core.model.AppConfig;
 import com.eva.core.exception.BusinessException;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.constants.ResponseStatus;
@@ -25,9 +24,6 @@ import java.util.Date;
 public class SystemLoginBiz {
 
     @Resource
-    private AppConfig projectConfig;
-
-    @Resource
     private CaptchaService captchaService;
 
     @Resource
@@ -44,7 +40,7 @@ public class SystemLoginBiz {
         SystemLoginLog loginLog = new SystemLoginLog();
         loginLog.setLoginUsername(dto.getUsername());
         loginLog.setLoginTime(new Date());
-        loginLog.setSystemVersion(projectConfig.getVersion());
+        loginLog.setSystemVersion(Utils.AppConfig.getVersion());
         loginLog.setIp(Utils.User_Client.getIP(request));
         loginLog.setLocation(Utils.Location.getLocationString(loginLog.getIp()));
         loginLog.setPlatform(Utils.User_Client.getPlatform(request));

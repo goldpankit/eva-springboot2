@@ -1,7 +1,6 @@
 package com.eva.biz.system;
 
 import com.eva.biz.system.dto.*;
-import com.eva.core.model.AppConfig;
 import com.eva.core.exception.BusinessException;
 import com.eva.core.constants.ResponseStatus;
 import com.eva.core.model.LoginUserInfo;
@@ -32,9 +31,6 @@ import java.util.List;
 
 @Service
 public class SystemUserBiz {
-
-    @Resource
-    private AppConfig projectConfig;
 
     @Resource
     private SystemUserService systemUserService;
@@ -163,10 +159,10 @@ public class SystemUserBiz {
             throw new BusinessException(ResponseStatus.NOT_ALLOWED, "请勿删除自己");
         }
         // 非超级管理员不可删除超级管理员
-        if (!userInfo.getRoles().contains(projectConfig.getSuperAdminRole())) {
+        if (!userInfo.getRoles().contains(Utils.AppConfig.getSuperAdminRole())) {
             List<SystemRole> roles = systemRoleService.findByUserId(user.getId());
             roles.stream().findFirst().ifPresent(role -> {
-                if (role.getCode().equals(projectConfig.getSuperAdminRole())) {
+                if (role.getCode().equals(Utils.AppConfig.getSuperAdminRole())) {
                     throw new BusinessException(ResponseStatus.NOT_ALLOWED, "您无权删除超级管理员用户");
                 }
             });

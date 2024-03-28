@@ -35,9 +35,6 @@ import java.util.Date;
 @Component
 public class TraceInterceptor implements HandlerInterceptor {
 
-    @Resource
-    private AppConfig projectConfig;
-
     private static final String ATTRIBUTE_TRACE_ID = "eva-trace-id";
 
     private static final String ATTRIBUTE_TRACE_TIME = "eva-trace-time";
@@ -104,7 +101,7 @@ public class TraceInterceptor implements HandlerInterceptor {
             // 辅助信息
             traceLog.setServerIp(Utils.Server.getIP());
             traceLog.setIp(Utils.User_Client.getIP(request));
-            traceLog.setSystemVersion(projectConfig.getVersion());
+            traceLog.setSystemVersion(Utils.AppConfig.getVersion());
             traceLog.setPlatform(Utils.User_Client.getPlatform(request));
             traceLog.setClientInfo(Utils.User_Client.getBrowser(request));
             traceLog.setOsInfo(Utils.User_Client.getOS(request));
@@ -308,7 +305,7 @@ public class TraceInterceptor implements HandlerInterceptor {
         Trace methodTrace = method.getAnnotation(Trace.class);
         Trace classTrace = method.getDeclaringClass().getAnnotation(Trace.class);
         // 非智能模式，只有添加了@Trace注解才会允许跟踪
-        if (!projectConfig.getTrace().getSmart()) {
+        if (!Utils.AppConfig.getTrace().getSmart()) {
             if (methodTrace != null) {
                 return !methodTrace.exclude();
             }
@@ -326,7 +323,7 @@ public class TraceInterceptor implements HandlerInterceptor {
             return !classTrace.exclude();
         }
         // 匹配排除路径，如果匹配到，则不允许跟踪
-        String[] patterns = projectConfig.getTrace().getExcludePatterns();
+        String[] patterns = Utils.AppConfig.getTrace().getExcludePatterns();
         if (patterns.length > 0) {
             String uri = request.getRequestURI();
             for (String pattern : patterns) {

@@ -2,12 +2,12 @@ package com.eva.biz.system;
 
 import com.eva.biz.system.dto.CreateSystemRoleDTO;
 import com.eva.biz.system.dto.UpdateSystemRoleDTO;
-import com.eva.core.model.AppConfig;
 import com.eva.core.exception.BusinessException;
 import com.eva.core.constants.ResponseStatus;
 import com.eva.core.model.PageData;
 import com.eva.core.model.PageWrap;
 import com.eva.core.utils.AssertUtil;
+import com.eva.core.utils.Utils;
 import com.eva.dao.system.SystemRoleMapper;
 import com.eva.dao.system.dto.QuerySystemRoleDTO;
 import com.eva.dao.system.model.SystemRole;
@@ -25,9 +25,6 @@ import java.util.List;
 
 @Service
 public class SystemRoleBiz {
-
-    @Resource
-    private AppConfig projectConfig;
 
     @Resource
     private SystemRoleService systemRoleService;
@@ -69,7 +66,7 @@ public class SystemRoleBiz {
             return;
         }
         // 不允许删除超级管理员权限
-        if (role.getCode().equals(projectConfig.getSuperAdminRole())) {
+        if (role.getCode().equals(Utils.AppConfig.getSuperAdminRole())) {
             throw new BusinessException(ResponseStatus.NOT_ALLOWED, "不允许删除超级管理员权限");
         }
         systemRoleService.deleteById(id);
@@ -102,7 +99,7 @@ public class SystemRoleBiz {
         SystemRole role = systemRoleService.findById(dto.getId());
         AssertUtil.notEmpty(role, ResponseStatus.DATA_EMPTY);
         // 不可修改超级管理员编码
-        if (role.getCode().equals(projectConfig.getSuperAdminRole())) {
+        if (role.getCode().equals(Utils.AppConfig.getSuperAdminRole())) {
             throw new BusinessException(ResponseStatus.NOT_ALLOWED, "不允许修改超级管理员编码");
         }
         // 验证角色编码
