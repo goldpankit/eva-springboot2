@@ -52,11 +52,7 @@ public final class DictUtil {
      * @return 字典数据标签
      */
     public String getDictDataLabel (String code, String dataValue) {
-        DictDataCache dataCache = this.getDictData(code, dataValue);
-        if (dataCache != null) {
-            return dataCache.getLabel();
-        }
-        return code;
+        return this.getDictData(code, dataValue).getLabel();
     }
 
     /**

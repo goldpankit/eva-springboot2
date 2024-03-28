@@ -1,7 +1,6 @@
 package com.eva.core.trace;
 
 import com.alibaba.fastjson.JSON;
-import com.eva.core.model.AppConfig;
 import com.eva.core.constants.Constants;
 import com.eva.core.model.ApiResponse;
 import com.eva.core.model.LoginUserInfo;

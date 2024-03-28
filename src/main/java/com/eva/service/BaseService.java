@@ -157,9 +157,7 @@ public class BaseService<Model extends BaseModel, Mapper extends BaseMapper<Mode
             return mapper.delete(queryWrapper);
         }
         List<Integer> deleteIds = new ArrayList<>();
-        this.findList(queryWrapper).forEach(item -> {
-            deleteIds.add(item.getId());
-        });
+        this.findList(queryWrapper).forEach(item -> deleteIds.add(item.getId()));
         return this.deleteByIdInBatch(deleteIds);
     }
 
