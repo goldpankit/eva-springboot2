@@ -1,9 +1,8 @@
 package com.eva.core.authorize;
 
+import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,8 +38,8 @@ public final class Authorizer {
      * @return boolean
      */
     public boolean isSuperAdmin () {
-        Subject currentUser = SecurityUtils.getSubject();
-        return currentUser.hasRole(Utils.AppConfig.getSuperAdminRole());
+        LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        return loginUserInfo.getRoles().contains(Utils.AppConfig.getSuperAdminRole());
     }
 
     /**
@@ -50,8 +49,8 @@ public final class Authorizer {
      * @return boolean
      */
     public boolean hasRoles (String[] roles) {
-        Subject currentUser = SecurityUtils.getSubject();
-        return currentUser.hasAllRoles(Arrays.asList(roles));
+        LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        return loginUserInfo.getRoles().containsAll(Arrays.asList(roles));
     }
 
     /**
@@ -61,10 +60,9 @@ public final class Authorizer {
      * @return boolean
      */
     public boolean hasAnyRoles (String[] roles) {
-        Subject currentUser = SecurityUtils.getSubject();
-        boolean[] hasRoles = currentUser.hasRoles(Arrays.asList(roles));
-        for (boolean hasRole : hasRoles) {
-            if (hasRole) {
+        LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        for (String role: roles) {
+            if (loginUserInfo.getRoles().contains(role)) {
                 return Boolean.TRUE;
             }
         }
@@ -78,8 +76,8 @@ public final class Authorizer {
      * @return boolean
      */
     public boolean hasPermissions (String[] permissions) {
-        Subject currentUser = SecurityUtils.getSubject();
-        return currentUser.isPermittedAll(permissions);
+        LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        return loginUserInfo.getPermissions().containsAll(Arrays.asList(permissions));
     }
 
     /**
@@ -89,17 +87,21 @@ public final class Authorizer {
      * @return boolean
      */
     public boolean hasAnyPermissions (String[] permissions) {
-        Subject currentUser = SecurityUtils.getSubject();
-        boolean[] hasPermissions = currentUser.isPermitted(permissions);
-        for (boolean hasPermission : hasPermissions) {
-            if (hasPermission) {
+        LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        for (String permission: permissions) {
+            if (loginUserInfo.getPermissions().contains(permission)) {
                 return Boolean.TRUE;
             }
         }
         return Boolean.FALSE;
     }
 
-    // 验证表达式是否成立
+    /**
+     * 验证表达式是否成立
+     *
+     * @param express 表达式
+     * @return boolean
+     */
     public boolean checkExpress (String express) {
         // 表达式为空
         if (StringUtils.isBlank(express)) {
