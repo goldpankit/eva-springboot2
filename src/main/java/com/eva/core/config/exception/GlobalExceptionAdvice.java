@@ -33,7 +33,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(UnauthorizedException.class)
     public Object handleUnauthorizedException (UnauthorizedException e) {
-        log.error(e.getMessage());
+        log.error("无权访问");
         return ApiResponse.failed(HttpStatus.FORBIDDEN.value(), "您当前账号没有该权限，请联系管理员授权！");
     }
 

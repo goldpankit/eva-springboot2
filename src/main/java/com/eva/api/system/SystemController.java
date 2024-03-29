@@ -12,11 +12,10 @@ import com.eva.biz.system.dto.LoginDTO;
 import com.eva.biz.system.dto.UpdatePwdDTO;
 import com.eva.dao.system.vo.SystemMenuNodeVO;
 import com.eva.biz.system.SystemLoginBiz;
+import com.eva.service.system.LoginUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,6 +41,9 @@ public class SystemController extends BaseController {
     @Resource
     private SystemBiz systemBiz;
 
+    @Resource
+    private LoginUserService loginUserService;
+
     @ApiOperation("登录")
     @PostMapping("/login")
     public ApiResponse<String> login (@RequestBody LoginDTO dto, HttpServletRequest request) {
@@ -50,9 +52,8 @@ public class SystemController extends BaseController {
 
     @ApiOperation("退出登录")
     @PostMapping("/logout")
-    public ApiResponse<?> logout () {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+    public ApiResponse<?> logout (HttpServletRequest request) {
+        loginUserService.logout(request);
         return ApiResponse.success(null);
     }
 

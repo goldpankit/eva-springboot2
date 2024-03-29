@@ -4,6 +4,8 @@ import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import com.eva.dao.system.model.SystemPermission;
 import com.eva.dao.system.model.SystemRole;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,9 +26,6 @@ public class LoginUserService {
 
     @Resource
     private SystemPermissionService systemPermissionService;
-
-    @Resource
-    private LoginTokenService loginTokenService;
 
     /**
      * 补充登录用户信息
@@ -74,6 +73,7 @@ public class LoginUserService {
      * @param request HttpServletRequest
      */
     public void logout (HttpServletRequest request) {
-        loginTokenService.remove(request);
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
     }
 }

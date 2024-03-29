@@ -26,9 +26,9 @@ public class AuthorizeExpressAspect {
     @Around(value = "authorizeExpressPointcut(annotation)", argNames = "joinPoint,annotation")
     public Object checkAuthorization(ProceedingJoinPoint joinPoint, AuthorizeExpress annotation) throws Throwable {
         String express = annotation.value();
-        if (authorizer.checkExpress(express)) {
-            return joinPoint.proceed();
+        if (!authorizer.checkExpress(express)) {
+            throw new UnauthorizedException();
         }
-        throw new UnauthorizedException();
+        return joinPoint.proceed();
     }
 }
