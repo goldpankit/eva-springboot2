@@ -114,6 +114,9 @@ public class AppConfig {
         @ApiModelProperty("会话超时时间")
         private Integer expire;
 
+        @ApiModelProperty("token在缓存中的存储前缀")
+        private String tokenCachePrefix;
+
         @ApiModelProperty("会话模式")
         private String mode;
 

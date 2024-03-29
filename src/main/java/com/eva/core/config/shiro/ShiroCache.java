@@ -24,8 +24,6 @@ import java.util.Set;
 @Component
 public class ShiroCache implements Cache<Object, Serializable> {
 
-    private static final String KEY_PREFIX = "shiro:session:";
-
     @Resource
     private CacheProxy<Object, Serializable> cacheProxy;
 
@@ -40,7 +38,7 @@ public class ShiroCache implements Cache<Object, Serializable> {
     /**
      * put方法在创建新的会话和更新会话时均会被调用
      *
-     * @param key sessionId
+     * @param key token
      * @param value 会话对象
      * @return 会话对象
      * @throws CacheException 缓存异常
@@ -74,12 +72,12 @@ public class ShiroCache implements Cache<Object, Serializable> {
 
     @Override
     public Set<Object> keys() {
-        Set<Object> keys = cacheProxy.keys(KEY_PREFIX + "*");
+        Set<Object> keys = cacheProxy.keys(Utils.AppConfig.getSession().getTokenCachePrefix() + "*");
         if (CollectionUtils.isEmpty(keys)) {
             return Collections.emptySet();
         }
         return keys.stream()
-                .map(k -> k.toString().replace(KEY_PREFIX, ""))
+                .map(k -> k.toString().replace(Utils.AppConfig.getSession().getTokenCachePrefix(), ""))
                 .collect(java.util.stream.Collectors.toSet());
     }
 
@@ -109,7 +107,7 @@ public class ShiroCache implements Cache<Object, Serializable> {
     /**
      * 重新延长缓存键的存储时长
      *
-     * @param key 缓存键
+     * @param key token
      */
     public void relive(Object key) {
         if (key == null) {
@@ -118,7 +116,13 @@ public class ShiroCache implements Cache<Object, Serializable> {
         cacheProxy.relive(getKey(key), Utils.AppConfig.getSession().getExpire());
     }
 
+    /**
+     * 获取令牌缓存Key
+     *
+     * @param key token
+     * @return 缓存Key
+     */
     private Object getKey (Object key) {
-        return (key instanceof String ? (KEY_PREFIX + key) : key);
+        return (key instanceof String ? (Utils.AppConfig.getSession().getTokenCachePrefix() + key) : key);
     }
 }
