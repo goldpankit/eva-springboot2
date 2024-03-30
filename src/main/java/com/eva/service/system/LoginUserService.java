@@ -1,5 +1,7 @@
 package com.eva.service.system;
 
+import com.eva.core.constants.ResponseStatus;
+import com.eva.core.exception.BusinessException;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import com.eva.dao.system.model.SystemPermission;
@@ -65,6 +67,7 @@ public class LoginUserService {
         if (!roleIds.isEmpty()) {
             loginUserInfo.setSystemConfigPermissionIds(systemPermissionService.findSystemConfigPermissionIdsByRoleIds(roleIds));
         }
+        throw new BusinessException(ResponseStatus.NOT_ALLOWED);
     }
 
     /**

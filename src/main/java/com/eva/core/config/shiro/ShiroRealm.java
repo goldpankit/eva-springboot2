@@ -51,7 +51,7 @@ public class ShiroRealm extends AuthorizingRealm {
         queryDto.setUsername(username);
         SystemUser user = systemUserService.findOne(queryDto);
         if (user == null) {
-            throw new AuthenticationException(new BusinessException(ResponseStatus.ACCOUNT_INCORRECT));
+            throw new BusinessException(ResponseStatus.ACCOUNT_INCORRECT);
         }
         // 验证用户
         LoginUserInfo loginUserInfo = new LoginUserInfo();
