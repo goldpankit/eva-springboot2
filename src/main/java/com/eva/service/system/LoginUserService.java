@@ -67,7 +67,6 @@ public class LoginUserService {
         if (!roleIds.isEmpty()) {
             loginUserInfo.setSystemConfigPermissionIds(systemPermissionService.findSystemConfigPermissionIdsByRoleIds(roleIds));
         }
-        throw new BusinessException(ResponseStatus.NOT_ALLOWED);
     }
 
     /**
