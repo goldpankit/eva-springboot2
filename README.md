@@ -18,11 +18,6 @@
 - 接口文档：http://online-v4.eva.adjustrd.com/api/doc/auth.html
 - 技术文档：http://v4.eva.adjustrd.com/
 
-## 在线演示 & 技术文档
-- 演示地址：http://online-v4.eva.adjustrd.com/
-- 接口文档：http://online-v4.eva.adjustrd.com/api/doc/auth.html
-- 技术文档：http://v4.eva.adjustrd.com/
-
 超级管理员账号：admin/123123
 
 ## 项目特点
