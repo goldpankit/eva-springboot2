@@ -1,13 +1,22 @@
-## 基础信息
+<div align="center">
+  <img src="https://oscimg.oschina.net/oscnet/up-822e9c58e183743632172841170a5e9cf2a.png" width="120px" style="width:80px;height:80px;" />
+  <h1>Eva4</h1>
+  <h2>致敬每一个技术人</h2>
+</div>
 
-本权限基础工程由清华海峡院高端装备技术研究中心与清华海峡院联合研发。旨在作为一套标准化的网站后台、内部系统的后端基础工程，可与其他Eva系的前端基础工程自由搭配来完成一整个项目的研发。
+## 技术栈 & 版本信息
+- JDK：1.8
+- 控制层：SpringBoot 2.7.18
+- 持久层：MyBatis Plus 3.5.4.1
+- 接口文档：Knife4j 3.0.3
+- 权限：Apache Shiro 1.13.0 / Spring Security（可选）
+- 数据库连接池：Alibaba Druid 1.2.20
+- 缓存：内存缓存
 
 ## 在线演示 & 技术文档
 - 演示地址：http://online-v4.eva.adjustrd.com/
 - 接口文档：http://online-v4.eva.adjustrd.com/api/doc/auth.html
 - 技术文档：http://v4.eva.adjustrd.com/
-
-超级管理员账号：admin/123123
 
 ## 项目特点
 1. 可切换的技术栈，开源版本默认采用SpringBoot2 + Shiro + MyBatis Plus实现，使用GoldPanKit可以进行权限框架、文件上传、缓存等技术栈的切换或扩展。

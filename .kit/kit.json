@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
   "label": "Eva4后端Java SpringBoot2版",
-  "version": "4.2.2.0",
+  "version": "4.2.2.1",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
@@ -140,5 +140,5 @@
   },
   "settings": [],
   "introduce": "🇨🇳一套基于SpringBoot 2.x、MyBatis Plus和knife4j等技术的权限管理基础工程，可与任意eva系前端结合使用来完成权限系统的研发。",
-  "readme": "Eva4由**GoldPanKit官方研制**，其中Eva3.0已成功上线8000+项目，在4.0之前由「程序员懒猴子」维护，从4.0开始纳入**清华海峡院高端装备技术研究中心**进行整体改造和持续维护。\n\n## 服务介绍\n当前为Eva的Java SpringBoot2版本，持久层采用MyBatis Plus，安装服务时只需要指定「项目基础包名「和「数据源」即可快速构建并自动初始化项目。\n\n## 参数介绍\n|参数名称|参数说明|\n|-|-|\n|基础包名|即项目中的包前缀，一般格式为公司域名的缩写，如`com.eva`|\n|数据源|即数据库连接地址及数据库，数据库可以是一个已存在的，也可以是一个不存在的|\n\n::: danger 注意\n如果数据源指定了一个已存在的数据库，请勿直接执行服务安装后的脚本，应仔细检查是否存在冲突的表，避免误删了表。\n:::\n\n## 技术文档\n[http://v4.eva.adjustrd.com/](http://v4.eva.adjustrd.com/)\n\n## 在线演示\n[http://online-v4.eva.adjustrd.com/](http://online-v4.eva.adjustrd.com/)\n超级管理员账号：admin/123123\n\n## 技术支持\n\n可添加「**小艺**」企业微信，她会邀请您加入技术交流群。添加时请备注「**Eva**」\n<div>\n<img src=\"/resource/image?f=b0a226e3-e50b-4450-98ee-f581d365c7c9.png\" width=\"255px\" alt=\"小艺企业微信\"/>\n</div>"
+  "readme": "## 服务介绍\n当前为Eva的Java SpringBoot2版本，持久层采用MyBatis Plus，安装服务时只需要指定「项目基础包名「和「数据源」即可快速构建并自动初始化项目。\n\n## 参数介绍\n|参数名称|参数说明|\n|-|-|\n|基础包名|即项目中的包前缀，一般格式为公司域名的缩写，如`com.eva`|\n|数据源|即数据库连接地址及数据库，数据库可以是一个已存在的，也可以是一个不存在的|\n\n::: danger 注意\n如果数据源指定了一个已存在的数据库，请勿直接执行服务安装后的脚本，应仔细检查是否存在冲突的表，避免误删了表。\n:::\n\n## 技术文档\n[http://v4.eva.adjustrd.com/](http://v4.eva.adjustrd.com/)\n\n## 在线演示\n[http://online-v4.eva.adjustrd.com/](http://online-v4.eva.adjustrd.com/)\n超级管理员账号：admin/123123"
 }
