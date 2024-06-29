@@ -2,11 +2,6 @@
  数据库类型    : MySQL
  数据库版本    : 8.0.32
 */
-
--- 创建数据库
-CREATE DATABASE IF NOT EXISTS `eva4` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE eva4;
-
 -- 创建数据库表
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

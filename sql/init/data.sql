@@ -1,4 +1,6 @@
-USE eva4;
+SET NAMES utf8mb4;
+BEGIN;
+
 -- ################ 用户数据 ################
 INSERT INTO `system_user` (`id`, `username`, `real_name`, `emp_no`, `birthday`, `gender`, `email`, `email_digest`, `mobile`, `mobile_digest`, `avatar`, `password`, `salt`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (1, 'admin', '伊娃', NULL, NULL, 'MALE', NULL, NULL, NULL, NULL, '/avatar/man.png', '5ca1f224ef123998d99d8738e7727253', 'kl38c6', NULL, CURRENT_TIMESTAMP, NULL, NULL, 0);
 
@@ -274,3 +276,5 @@ INSERT INTO `system_role_permission` (`id`, `role_id`, `permission_id`, `created
 INSERT INTO `system_role_permission` (`id`, `role_id`, `permission_id`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (47, 1, 47, 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
 INSERT INTO `system_role_permission` (`id`, `role_id`, `permission_id`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (48, 1, 48, 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
 INSERT INTO `system_role_permission` (`id`, `role_id`, `permission_id`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted`) VALUES (49, 1, 49, 1, CURRENT_TIMESTAMP, NULL, NULL, 0);
+
+COMMIT;
