@@ -4,6 +4,11 @@
   <h2>致敬每一个技术人</h2>
 </div>
 
+## 修改包名
+为了让代码本身更贴近项目，我们将代码发布在了GoldPanKit上，可以直接使用GoldPanKit填写包名进行构建！
+- [构建前端工程](http://goldpankit.com/space/Eva/vue3-options)。
+- [构建后端工程](http://goldpankit.com/space/Eva/eva-springboot)。
+
 ## 技术栈 & 版本信息
 - JDK：1.8
 - 控制层：SpringBoot 2.7.18
