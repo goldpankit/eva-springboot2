@@ -20,15 +20,23 @@ public class ContainPermissionsAspect {
     private Authorizer authorizer;
 
     @Pointcut("@annotation(containPermissions)")
-    public void containPermissionsPointcut(ContainPermissions containPermissions) {
+    public void containPermissionsInMethodsPointcut(ContainPermissions containPermissions) {
+    }
+
+    @Pointcut("@within(containPermissions)")
+    public void containPermissionsInClassPointcut(ContainPermissions containPermissions) {
     }
 
     @Pointcut("@annotation(containAnyPermissions)")
-    public void containAnyPermissionsPointcut(ContainAnyPermissions containAnyPermissions) {
+    public void containAnyPermissionsInMethodsPointcut(ContainAnyPermissions containAnyPermissions) {
     }
 
-    @Around(value = "containPermissionsPointcut(annotation)", argNames = "joinPoint,annotation")
-    public Object checkAuthorization(ProceedingJoinPoint joinPoint, ContainPermissions annotation) throws Throwable {
+    @Pointcut("@within(containAnyPermissions)")
+    public void containAnyPermissionsInClassPointcut(ContainAnyPermissions containAnyPermissions) {
+    }
+
+    @Around(value = "containPermissionsInMethodsPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkMethodsAuthorization(ProceedingJoinPoint joinPoint, ContainPermissions annotation) throws Throwable {
         boolean authorized = authorizer.hasPermissions(annotation.value());
         if (!authorized) {
             throw new UnauthorizedException();
@@ -36,9 +44,27 @@ public class ContainPermissionsAspect {
         return joinPoint.proceed();
     }
 
-    @Around(value = "containAnyPermissionsPointcut(annotation)", argNames = "joinPoint,annotation")
-    public Object checkAuthorization(ProceedingJoinPoint joinPoint, ContainAnyPermissions annotation) throws Throwable {
+    @Around(value = "containPermissionsInClassPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkClassAuthorization(ProceedingJoinPoint joinPoint, ContainPermissions annotation) throws Throwable {
+        boolean authorized = authorizer.hasPermissions(annotation.value());
+        if (!authorized) {
+            throw new UnauthorizedException();
+        }
+        return joinPoint.proceed();
+    }
+
+    @Around(value = "containAnyPermissionsInMethodsPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkMethodsAuthorization(ProceedingJoinPoint joinPoint, ContainAnyPermissions annotation) throws Throwable {
         boolean authorized = authorizer.hasAnyPermissions(annotation.value());
+        if (!authorized) {
+            throw new UnauthorizedException();
+        }
+        return joinPoint.proceed();
+    }
+
+    @Around(value = "containAnyPermissionsInClassPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkClassAuthorization(ProceedingJoinPoint joinPoint, ContainAnyPermissions annotation) throws Throwable {
+        boolean authorized = authorizer.hasPermissions(annotation.value());
         if (!authorized) {
             throw new UnauthorizedException();
         }

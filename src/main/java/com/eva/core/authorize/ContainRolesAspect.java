@@ -20,15 +20,23 @@ public class ContainRolesAspect {
     private Authorizer authorizer;
 
     @Pointcut("@annotation(containRoles)")
-    public void containRolesPointcut(ContainRoles containRoles) {
+    public void containRolesInMethodsPointcut(ContainRoles containRoles) {
+    }
+
+    @Pointcut("@within(containRoles)")
+    public void containRolesInClassPointcut(ContainRoles containRoles) {
     }
 
     @Pointcut("@annotation(containAnyRoles)")
-    public void containAnyRolesPointcut(ContainAnyRoles containAnyRoles) {
+    public void containAnyRolesInMethodsPointcut(ContainAnyRoles containAnyRoles) {
     }
 
-    @Around(value = "containRolesPointcut(annotation)", argNames = "joinPoint,annotation")
-    public Object checkAuthorization(ProceedingJoinPoint joinPoint, ContainRoles annotation) throws Throwable {
+    @Pointcut("@within(containAnyRoles)")
+    public void containAnyRolesInClassPointcut(ContainAnyRoles containAnyRoles) {
+    }
+
+    @Around(value = "containRolesInMethodsPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkMethodsAuthorization(ProceedingJoinPoint joinPoint, ContainRoles annotation) throws Throwable {
         boolean authorized = authorizer.hasRoles(annotation.value());
         if (!authorized) {
             throw new UnauthorizedException();
@@ -36,8 +44,26 @@ public class ContainRolesAspect {
         return joinPoint.proceed();
     }
 
-    @Around(value = "containAnyRolesPointcut(annotation)", argNames = "joinPoint,annotation")
-    public Object checkAuthorization(ProceedingJoinPoint joinPoint, ContainAnyRoles annotation) throws Throwable {
+    @Around(value = "containRolesInClassPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkClassAuthorization(ProceedingJoinPoint joinPoint, ContainRoles annotation) throws Throwable {
+        boolean authorized = authorizer.hasRoles(annotation.value());
+        if (!authorized) {
+            throw new UnauthorizedException();
+        }
+        return joinPoint.proceed();
+    }
+
+    @Around(value = "containAnyRolesInMethodsPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkMethodsAuthorization(ProceedingJoinPoint joinPoint, ContainAnyRoles annotation) throws Throwable {
+        boolean authorized = authorizer.hasAnyRoles(annotation.value());
+        if (!authorized) {
+            throw new UnauthorizedException();
+        }
+        return joinPoint.proceed();
+    }
+
+    @Around(value = "containAnyRolesInClassPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkClassAuthorization(ProceedingJoinPoint joinPoint, ContainAnyRoles annotation) throws Throwable {
         boolean authorized = authorizer.hasAnyRoles(annotation.value());
         if (!authorized) {
             throw new UnauthorizedException();

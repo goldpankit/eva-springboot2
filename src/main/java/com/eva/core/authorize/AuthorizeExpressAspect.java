@@ -20,11 +20,24 @@ public class AuthorizeExpressAspect {
     private Authorizer authorizer;
 
     @Pointcut("@annotation(authorizeExpress)")
-    public void authorizeExpressPointcut(AuthorizeExpress authorizeExpress) {
+    public void authorizeExpressInMethodsPointcut(AuthorizeExpress authorizeExpress) {
     }
 
-    @Around(value = "authorizeExpressPointcut(annotation)", argNames = "joinPoint,annotation")
-    public Object checkAuthorization(ProceedingJoinPoint joinPoint, AuthorizeExpress annotation) throws Throwable {
+    @Pointcut("@within(authorizeExpress)")
+    public void authorizeExpressInClassPointcut(AuthorizeExpress authorizeExpress) {
+    }
+
+    @Around(value = "authorizeExpressInMethodsPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkMethodsAuthorization(ProceedingJoinPoint joinPoint, AuthorizeExpress annotation) throws Throwable {
+        String express = annotation.value();
+        if (!authorizer.checkExpress(express)) {
+            throw new UnauthorizedException();
+        }
+        return joinPoint.proceed();
+    }
+
+    @Around(value = "authorizeExpressInClassPointcut(annotation)", argNames = "joinPoint,annotation")
+    public Object checkClassAuthorization(ProceedingJoinPoint joinPoint, AuthorizeExpress annotation) throws Throwable {
         String express = annotation.value();
         if (!authorizer.checkExpress(express)) {
             throw new UnauthorizedException();
