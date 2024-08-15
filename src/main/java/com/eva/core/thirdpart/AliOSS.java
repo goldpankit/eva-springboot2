@@ -6,7 +6,6 @@ import com.eva.core.model.AppConfig;
 import com.eva.core.utils.Utils;
 import io.swagger.annotations.ApiModel;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,12 +17,12 @@ public class AliOSS {
     /**
      * 上传文件
      *
-     * @param file 文件
+     * @param inputStream 流
      * @param fileKey 文件的key
      */
-    public void upload(String bucket, MultipartFile file, String fileKey) throws IOException {
+    public void upload(String bucket, InputStream inputStream, String fileKey) throws IOException {
         com.aliyun.oss.OSS ossClient = this.getOSSClient();
-        ossClient.putObject(bucket, fileKey, file.getInputStream());
+        ossClient.putObject(bucket, fileKey, inputStream);
         ossClient.shutdown();
     }
 

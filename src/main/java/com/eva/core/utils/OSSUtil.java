@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -63,22 +65,38 @@ public class OSSUtil {
      */
     public UploadResult uploadImage(String bucket, MultipartFile imageFile, String businessPath) {
         try {
+            return this.uploadImage(bucket, imageFile.getInputStream(), imageFile.getOriginalFilename(), businessPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param inputStream 文件流
+     * @param filename 文件名
+     * @param businessPath 业务路径，如使用"/avatar"表示用户头像路径，"/goods/cover"表示商品封面图片等
+     * @return 文件访问路径
+     */
+    public UploadResult uploadImage(String bucket, InputStream inputStream, String filename, String businessPath) {
+        try {
             // 设置图片文件默认类型限制
             if (this.fileTypes.get() == null || this.fileTypes.get().length == 0) {
                 this.setFileTypes(".jpg,.jpeg,.png,.gif");
             }
             // 验证文件
-            this.checkUpload(imageFile);
+            this.checkUpload(inputStream, filename);
             // 执行上传
-            DoUploadResult doUploadResult = this.doUpload(bucket, imageFile, businessPath);
+            DoUploadResult doUploadResult = this.doUpload(bucket, inputStream, filename, businessPath);
             // 返回上传结果
             if (StringUtils.isBlank(businessPath)) {
                 String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/image?f=" + doUploadResult.getFileId();
-                return new UploadResult(imageFile.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
+                return new UploadResult(filename, doUploadResult.getFileKey(), accessUri);
             }
             // - 此处直接返回业务路径 + 文件ID，避免业务路径和fileKey重复
             String accessUri = businessPath + "?f=" + doUploadResult.getFileId();
-            return new UploadResult(imageFile.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
+            return new UploadResult(filename, doUploadResult.getFileKey(), accessUri);
         } catch (Exception e) {
             log.error("图片上传失败", e);
             throw new BusinessException(ResponseStatus.SERVER_ERROR.getCode(), "图片上传失败");
@@ -116,17 +134,34 @@ public class OSSUtil {
      */
     public UploadResult upload(String bucket, MultipartFile file, String businessPath) {
         try {
+            return this.upload(bucket, file.getInputStream(), file.getOriginalFilename(), businessPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param bucket 存储空间名称
+     * @param inputStream 文件流
+     * @param filename 文件名称
+     * @param businessPath 业务路径，如使用"/contract"表示合同文件，"/contract/attach"表示合同附件
+     * @return UploadResult
+     */
+    public UploadResult upload(String bucket, InputStream inputStream, String filename, String businessPath) {
+        try {
             // 验证文件
-            this.checkUpload(file);
+            this.checkUpload(inputStream, filename);
             // 执行上传
-            DoUploadResult doUploadResult = this.doUpload(bucket, file, businessPath);
+            DoUploadResult doUploadResult = this.doUpload(bucket, inputStream, filename, businessPath);
             // 返回上传结果
             if (StringUtils.isBlank(businessPath)) {
                 String accessUri = Utils.AppConfig.getOss().getAccessPrefix() + "/attach?f=" + doUploadResult.getFileId();
-                return new UploadResult(file.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
+                return new UploadResult(filename, doUploadResult.getFileKey(), accessUri);
             }
             String accessUri = businessPath + "?f=" + doUploadResult.getFileId();
-            return new UploadResult(file.getOriginalFilename(), doUploadResult.getFileKey(), accessUri);
+            return new UploadResult(filename, doUploadResult.getFileKey(), accessUri);
         } catch (Exception e) {
             log.error("文件上传失败", e);
             throw new BusinessException(ResponseStatus.SERVER_ERROR.getCode(), "文件上传失败");
@@ -180,12 +215,13 @@ public class OSSUtil {
      * 执行文件上传
      *
      * @param bucket 存储空间名称
-     * @param file 文件
+     * @param inputStream 文件流
+     * @param filename 文件名
      * @param directory 在bucket中存储的目录
      * @return fileId
      */
-    private DoUploadResult doUpload(String bucket, MultipartFile file, String directory) throws IOException {
-        String fileId = UUID.randomUUID() + getFileExtension(file);
+    private DoUploadResult doUpload(String bucket, InputStream inputStream, String filename, String directory) throws IOException {
+        String fileId = UUID.randomUUID() + getFileExtension(filename);
         String fileKey = fileId;
         // 指定存储目录
         if (StringUtils.isNotBlank(directory)) {
@@ -193,22 +229,21 @@ public class OSSUtil {
             fileKey = directoryPath + "/" + fileId;
         }
         // 执行上传
-        aliOSS.upload(bucket, file, fileKey);
+        aliOSS.upload(bucket, inputStream, fileKey);
         return new DoUploadResult(fileId, fileKey);
     }
 
     /**
      * 获取文件后缀
      *
-     * @param file 文件
+     * @param filename 文件名称
      * @return 文件后缀
      */
-    private String getFileExtension(MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename != null && !originalFilename.isEmpty()) {
-            int dotIndex = originalFilename.lastIndexOf('.');
-            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
-                return originalFilename.substring(dotIndex);
+    private String getFileExtension (String filename) {
+        if (filename != null && !filename.isEmpty()) {
+            int dotIndex = filename.lastIndexOf('.');
+            if (dotIndex > 0 && dotIndex < filename.length() - 1) {
+                return filename.substring(dotIndex);
             }
         }
         return "";
@@ -217,20 +252,19 @@ public class OSSUtil {
     /**
      * 验证文件上传
      *
-     * @param file 文件
+     * @param inputStream 文件流
+     * @param filename 文件名称
      */
-    private void checkUpload(MultipartFile file) {
+    private void checkUpload(InputStream inputStream, String filename) throws IOException {
         try {
             // 大小验证
             if (this.maxSize.get() != null) {
-                if(this.maxSize.get() * 1024 * 1024 < file.getSize()) {
+                if(this.maxSize.get() * 1024 * 1024 < inputStream.available()) {
                     throw new BusinessException(ResponseStatus.NOT_ALLOWED.getCode(), "文件大小超过限制");
                 }
             }
             // 格式验证
             if (this.fileTypes.get() != null && this.fileTypes.get().length > 0) {
-                // 获取文件名称
-                String filename = file.getOriginalFilename();
                 // 无后缀 && 存在格式限制
                 if (filename == null) {
                     throw new BusinessException(ResponseStatus.NOT_ALLOWED.getCode(), "文件格式不正确");
