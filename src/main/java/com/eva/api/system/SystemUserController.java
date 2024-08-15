@@ -3,7 +3,7 @@ package com.eva.api.system;
 import com.eva.api.BaseController;
 import com.eva.biz.system.SystemUserBiz;
 import com.eva.biz.system.dto.UpdateSystemUserDTO;
-import com.eva.core.authorize.AuthorizeExpress;
+import com.eva.core.authorize.ContainPermissions;
 import com.eva.core.prevent.PreventRepeat;
 import com.eva.core.secure.field.EnableSecureField;
 import com.eva.core.trace.Trace;
@@ -32,7 +32,7 @@ public class SystemUserController extends BaseController {
     @PreventRepeat
     @ApiOperation("配置用户角色")
     @PostMapping("/createUserRole")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:role:config')")
+    @ContainPermissions("system:user:role:config")
     public ApiResponse<?> createUserRole (@RequestBody CreateUserRoleDTO dto) {
         systemUserBiz.createUserRole(dto);
         return ApiResponse.success(null);
@@ -42,7 +42,7 @@ public class SystemUserController extends BaseController {
     @PreventRepeat
     @ApiOperation("重置用户密码")
     @PostMapping("/resetPwd")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:password:reset')")
+    @ContainPermissions("system:user:password:reset")
     public ApiResponse<?> resetPwd (@RequestBody ResetSystemUserPwdDTO dto) {
         dto.setOperaUserId(this.getLoginUser().getId());
         systemUserBiz.resetPwd(dto);
@@ -53,7 +53,7 @@ public class SystemUserController extends BaseController {
     @PreventRepeat
     @ApiOperation("新建")
     @PostMapping("/create")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:create')")
+    @ContainPermissions("system:user:create")
     @EnableSecureField
     public ApiResponse<?> create(@RequestBody CreateSystemUserDTO systemUser) {
         systemUserBiz.create(systemUser);
@@ -62,7 +62,7 @@ public class SystemUserController extends BaseController {
 
     @ApiOperation("删除")
     @GetMapping("/delete/{id}")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:delete')")
+    @ContainPermissions("system:user:delete")
     public ApiResponse<?> deleteById(@PathVariable Integer id) {
         systemUserBiz.deleteById(id);
         return ApiResponse.success(null);
@@ -70,7 +70,7 @@ public class SystemUserController extends BaseController {
 
     @ApiOperation("批量删除")
     @GetMapping("/delete/batch")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:delete')")
+    @ContainPermissions("system:user:delete")
     public ApiResponse<?> deleteByIdInBatch(@RequestParam String ids) {
         systemUserBiz.deleteByIdInBatch(this.getIdList(ids));
         return ApiResponse.success(null);
@@ -79,7 +79,7 @@ public class SystemUserController extends BaseController {
     @Trace(withRequestParameters = false)
     @ApiOperation("修改")
     @PostMapping("/updateById")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:update')")
+    @ContainPermissions("system:user:update")
     @EnableSecureField
     public ApiResponse<?> updateById(@RequestBody UpdateSystemUserDTO systemUser) {
         systemUserBiz.updateById(systemUser);
@@ -88,7 +88,7 @@ public class SystemUserController extends BaseController {
 
     @ApiOperation("分页查询")
     @PostMapping("/page")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:user:query')")
+    @ContainPermissions("system:user:query")
     @EnableSecureField
     public ApiResponse<PageData<SystemUserVO>> findPage (@RequestBody PageWrap<QuerySystemUserDTO> pageWrap) {
         PageData<SystemUserVO> page = systemUserBiz.findPage(pageWrap);

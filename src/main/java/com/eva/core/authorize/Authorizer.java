@@ -4,6 +4,7 @@ import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -57,7 +58,7 @@ public final class Authorizer {
             return Boolean.FALSE;
         }
         // 如果是超管，则验证通过
-        if (this.isSuperAdmin()) {
+        if (loginUserInfo.getIsSuperAdmin()) {
             return Boolean.TRUE;
         }
         return loginUserInfo.getRoles().containsAll(Arrays.asList(roles));
@@ -75,7 +76,7 @@ public final class Authorizer {
             return Boolean.FALSE;
         }
         // 如果是超管，则验证通过
-        if (this.isSuperAdmin()) {
+        if (loginUserInfo.getIsSuperAdmin()) {
             return Boolean.TRUE;
         }
         for (String role: roles) {
@@ -98,7 +99,7 @@ public final class Authorizer {
             return Boolean.FALSE;
         }
         // 如果是超管 && 权限为空，则验证通过
-        if (this.isSuperAdmin() && permissions.length == 0) {
+        if (loginUserInfo.getIsSuperAdmin() && CollectionUtils.isEmpty(loginUserInfo.getPermissions())) {
             return Boolean.TRUE;
         }
         return loginUserInfo.getPermissions().containsAll(Arrays.asList(permissions));
@@ -116,7 +117,7 @@ public final class Authorizer {
             return Boolean.FALSE;
         }
         // 如果是超管 && 权限为空，则验证通过
-        if (this.isSuperAdmin() && permissions.length == 0) {
+        if (loginUserInfo.getIsSuperAdmin() && CollectionUtils.isEmpty(loginUserInfo.getPermissions())) {
             return Boolean.TRUE;
         }
         for (String permission: permissions) {

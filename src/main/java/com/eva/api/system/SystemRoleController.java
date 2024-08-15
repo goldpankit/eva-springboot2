@@ -4,7 +4,8 @@ import com.eva.api.BaseController;
 import com.eva.biz.system.SystemRoleBiz;
 import com.eva.biz.system.dto.CreateSystemRoleDTO;
 import com.eva.biz.system.dto.UpdateSystemRoleDTO;
-import com.eva.core.authorize.AuthorizeExpress;
+import com.eva.core.authorize.ContainAnyPermissions;
+import com.eva.core.authorize.ContainPermissions;
 import com.eva.core.prevent.PreventRepeat;
 import com.eva.core.model.ApiResponse;
 import com.eva.core.model.PageData;
@@ -35,14 +36,14 @@ public class SystemRoleController extends BaseController {
     @PreventRepeat
     @ApiOperation("新建")
     @PostMapping("/create")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:create')")
+    @ContainPermissions("system:role:create")
     public ApiResponse<?> create(@RequestBody CreateSystemRoleDTO dto) {
         return ApiResponse.success(systemRoleBiz.create(dto));
     }
 
     @ApiOperation("删除")
     @GetMapping("/delete/{id}")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:delete')")
+    @ContainPermissions("system:role:delete")
     public ApiResponse<?> deleteById(@PathVariable Integer id) {
         systemRoleBiz.deleteById(id);
         return ApiResponse.success(null);
@@ -50,7 +51,7 @@ public class SystemRoleController extends BaseController {
 
     @ApiOperation("批量删除")
     @GetMapping("/delete/batch")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:delete')")
+    @ContainPermissions("system:role:delete")
     public ApiResponse<?> deleteByIdInBatch(@RequestParam String ids) {
         systemRoleBiz.deleteByIdInBatch(this.getIdList(ids));
         return ApiResponse.success(null);
@@ -58,7 +59,7 @@ public class SystemRoleController extends BaseController {
 
     @ApiOperation("修改")
     @PostMapping("/updateById")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:update')")
+    @ContainPermissions("system:role:update")
     public ApiResponse<?> updateById(@RequestBody UpdateSystemRoleDTO dto) {
         systemRoleBiz.updateById(dto);
         return ApiResponse.success(null);
@@ -66,14 +67,14 @@ public class SystemRoleController extends BaseController {
 
     @ApiOperation("分页查询")
     @PostMapping("/page")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:query')")
+    @ContainPermissions("system:role:query")
     public ApiResponse<PageData<SystemRoleVO>> findPage (@RequestBody PageWrap<QuerySystemRoleDTO> pageWrap) {
         return ApiResponse.success(systemRoleBiz.findPage(pageWrap));
     }
 
     @ApiOperation("查询所有")
     @GetMapping("/all")
-    @AuthorizeExpress("isSuperAdmin() || hasPermissions('system:role:query') || hasPermissions('system:user:role:config')")
+    @ContainAnyPermissions({"system:role:query", "system:user:role:config"})
     public ApiResponse<List<SystemRole>> findAll () {
         List<SystemRole> roles = systemRoleService.findAll();
         // 如果不是超级管理员，不要查询出超级管理员角色
