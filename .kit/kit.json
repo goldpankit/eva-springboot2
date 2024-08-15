@@ -10,6 +10,7 @@
   "supportedDatabases": [
     "mysql"
   ],
+  "presetPlugins": [],
   "prices": [
     {
       "type": "FREE",
@@ -18,15 +19,15 @@
   ],
   "builds": [
     {
-      "name": "创建数据库并初始化表结构",
+      "name": "初始化表结构",
       "type": "MySQL",
-      "content": "/sql/init/tables.sql",
+      "content": "",
       "contentType": "file"
     },
     {
       "name": "初始化基础数据",
       "type": "MySQL",
-      "content": "/sql/init/data.sql",
+      "content": "",
       "contentType": "file"
     }
   ],
@@ -64,79 +65,15 @@
       "inputType": "datasource",
       "required": true,
       "hidden": false,
-      "defaultValue": "15igipz07w",
+      "defaultValue": null,
       "compiler": "static",
       "remark": "选择一个数据源，项目构建完成后将自动为您初始化数据库。"
     }
   ],
   "translator": {
     "output": ".kit/translated",
-    "settings": [
-      {
-        "name": "#{}表达式处理",
-        "path": ".*\\.xml",
-        "type": "code",
-        "source": "",
-        "target": "",
-        "code": "  if (content == null) {\n    return {filepath: filepath, content: content};\n  }\n  if (fileSetting.compiler === 'static') {\n    return {filepath: filepath, content: content};\n  }\n  if (filepath.split('/').pop() === 'pom.xml') {\n    return {filepath: filepath, content: content};\n  }\n  content = content.replace(/#{/g, '<#noparse>#{</#noparse>')\n  return {filepath: filepath, content: content};"
-      },
-      {
-        "name": "${}表达式处理",
-        "path": ".*",
-        "type": "code",
-        "source": "",
-        "target": "",
-        "code": "  if (content == null) {\n    return {filepath: filepath, content: content};\n  }\n  if (fileSetting.compiler === 'static') {\n    return {filepath: filepath, content: content};\n  }\n  content = content.replace(/\\${/g, '<#noparse>${</#noparse>')\n  content = content.replace(/}/g, '<#noparse>}</#noparse>')\n  return {filepath: filepath, content: content};"
-      },
-      {
-        "name": "文件路径处理",
-        "path": ".*",
-        "type": "pattern",
-        "source": "com/eva",
-        "target": "${basePackagePath}",
-        "code": ""
-      },
-      {
-        "name": "文件中的包名处理",
-        "path": ".*",
-        "type": "pattern",
-        "source": "com\\.eva",
-        "target": "${basePackage}",
-        "code": ""
-      },
-      {
-        "name": "数据库用户名处理",
-        "path": ".*application-config.yml",
-        "type": "pattern",
-        "source": "username: username",
-        "target": "username: ${datasource.username}",
-        "code": ""
-      },
-      {
-        "name": "数据库密码处理",
-        "path": ".*application-config.yml",
-        "type": "pattern",
-        "source": "password: password",
-        "target": "password: ${datasource.password}",
-        "code": ""
-      },
-      {
-        "name": "数据库地址处理",
-        "path": ".*application-config.yml",
-        "type": "pattern",
-        "source": "localhost:3306/eva4",
-        "target": "${datasource.host}:${datasource.port}/${datasource.schema}",
-        "code": ""
-      },
-      {
-        "name": "数据库脚本处理",
-        "path": ".*\\.sql",
-        "type": "pattern",
-        "source": "eva4",
-        "target": "${datasource.schema}",
-        "code": ""
-      }
-    ]
+    "filepath": "filepath = filepath\n  .replace(/com\\/eva/, '${basePackagePath}')\n\nreturn filepath",
+    "content": "content = content\n  .replace(/\\$\\{/g, '<#noparse>${</#noparse>')\n  .replace(/\\#\\{/g, '<#noparse>#{</#noparse>')\n\n// 全局处理\ncontent = content\n  .replace(/com\\.eva/g, '${basePackage}')\n\nreturn content"
   },
   "settings": [],
   "introduce": "🇨🇳一套基于SpringBoot 2.x、MyBatis Plus和knife4j等技术的权限管理基础工程，可与任意eva系前端结合使用来完成权限系统的研发。",

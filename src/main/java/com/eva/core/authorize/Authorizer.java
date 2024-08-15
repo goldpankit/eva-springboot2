@@ -39,6 +39,9 @@ public final class Authorizer {
      */
     public boolean isSuperAdmin () {
         LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        if (loginUserInfo == null) {
+            return Boolean.FALSE;
+        }
         return loginUserInfo.getRoles().contains(Utils.AppConfig.getSuperAdminRole());
     }
 
@@ -50,6 +53,13 @@ public final class Authorizer {
      */
     public boolean hasRoles (String[] roles) {
         LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        if (loginUserInfo == null) {
+            return Boolean.FALSE;
+        }
+        // 如果是超管，则验证通过
+        if (this.isSuperAdmin()) {
+            return Boolean.TRUE;
+        }
         return loginUserInfo.getRoles().containsAll(Arrays.asList(roles));
     }
 
@@ -61,6 +71,13 @@ public final class Authorizer {
      */
     public boolean hasAnyRoles (String[] roles) {
         LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        if (loginUserInfo == null) {
+            return Boolean.FALSE;
+        }
+        // 如果是超管，则验证通过
+        if (this.isSuperAdmin()) {
+            return Boolean.TRUE;
+        }
         for (String role: roles) {
             if (loginUserInfo.getRoles().contains(role)) {
                 return Boolean.TRUE;
@@ -77,6 +94,13 @@ public final class Authorizer {
      */
     public boolean hasPermissions (String[] permissions) {
         LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        if (loginUserInfo == null) {
+            return Boolean.FALSE;
+        }
+        // 如果是超管 && 权限为空，则验证通过
+        if (this.isSuperAdmin() && permissions.length == 0) {
+            return Boolean.TRUE;
+        }
         return loginUserInfo.getPermissions().containsAll(Arrays.asList(permissions));
     }
 
@@ -88,6 +112,13 @@ public final class Authorizer {
      */
     public boolean hasAnyPermissions (String[] permissions) {
         LoginUserInfo loginUserInfo = Utils.Session.getLoginUser();
+        if (loginUserInfo == null) {
+            return Boolean.FALSE;
+        }
+        // 如果是超管 && 权限为空，则验证通过
+        if (this.isSuperAdmin() && permissions.length == 0) {
+            return Boolean.TRUE;
+        }
         for (String permission: permissions) {
             if (loginUserInfo.getPermissions().contains(permission)) {
                 return Boolean.TRUE;
