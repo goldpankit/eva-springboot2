@@ -7,6 +7,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +21,9 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
+
+    @Value("${app.session.expire}")
+    private int sessionExpire;
 
     @Resource
     private AppConfig projectConfig;
@@ -44,6 +48,7 @@ public class ShiroConfig {
     public SessionManager sessionManager() {
         ShiroSessionManager sessionManager = new ShiroSessionManager();
         sessionManager.setSessionDAO(shiroSessionDAO);
+        sessionManager.setGlobalSessionTimeout(sessionExpire * 1000L);
         return sessionManager;
     }
 
