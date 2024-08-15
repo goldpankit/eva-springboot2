@@ -99,7 +99,7 @@ public class SystemRoleBiz {
         SystemRole role = systemRoleService.findById(dto.getId());
         AssertUtil.notEmpty(role, ResponseStatus.DATA_EMPTY);
         // 不可修改超级管理员编码
-        if (role.getCode().equals(Utils.AppConfig.getSuperAdminRole())) {
+        if (role.getCode().equals(Utils.AppConfig.getSuperAdminRole()) && !role.getCode().equals(dto.getCode())) {
             throw new BusinessException(ResponseStatus.NOT_ALLOWED, "不允许修改超级管理员编码");
         }
         // 验证角色编码
