@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -80,9 +81,21 @@ public class ExcelExporter<T> {
             for (int rowIndex = 0; rowIndex < data.size(); rowIndex++) {
                 Row row = sheet.createRow(rowIndex + 1);
                 for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
+                    T dataLine = data.get(rowIndex);
                     ColumnInfo column = columns.get(columnIndex);
                     Cell cell = row.createCell(columnIndex);
-                    cell.setCellValue(getCellData(column, data.get(rowIndex), cell, sxssfWorkbook));
+                    Method getMethod = dataLine.getClass().getMethod("get" + StringUtils.capitalize(column.field.getName()));
+                    Object value = getMethod.invoke(dataLine);
+                    if (value != null) {
+                        // 数字类型
+                        if (value instanceof Double || value instanceof BigDecimal || value instanceof Integer || value instanceof Long) {
+                            cell.setCellValue(getNumberCellData(column, dataLine, cell, sxssfWorkbook));
+                        }
+                        // 其它类型，统一归纳为字符串类型
+                        else {
+                            cell.setCellValue(getCellData(column, dataLine, cell, sxssfWorkbook));
+                        }
+                    }
                     // 设置数据单元格
                     configDataCell(sxssfWorkbook, cell, column.columnConfig);
                 }
@@ -182,6 +195,10 @@ public class ExcelExporter<T> {
         // 边框
         configCellBorder(style);
         cell.setCellStyle(style);
+        // 设置数据格式
+        if (!"".equals(columnConfig.format())) {
+            style.setDataFormat(workbook.createDataFormat().getFormat(columnConfig.format()));
+        }
     }
 
     /**
@@ -263,6 +280,28 @@ public class ExcelExporter<T> {
         // 后缀处理
         stringValue = stringValue + columnInfo.columnConfig.suffix();
         return stringValue;
+    }
+
+
+    /**
+     * 获取数值数据
+     */
+    private Double getNumberCellData (ColumnInfo columnInfo, T row, Cell cell, Workbook workbook) throws Exception{
+        Method getMethod = row.getClass().getMethod("get" + StringUtils.capitalize(columnInfo.field.getName()));
+        Object value = getMethod.invoke(row);
+        if (value instanceof Double) {
+            return (Double) value;
+        }
+        if (value instanceof BigDecimal) {
+            return ((BigDecimal) value).doubleValue();
+        }
+        if (value instanceof Integer) {
+            return ((Integer) value).doubleValue();
+        }
+        if (value instanceof Long) {
+            return ((Long) value).doubleValue();
+        }
+        return Double.parseDouble(value.toString());
     }
 
     /**

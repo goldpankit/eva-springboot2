@@ -84,6 +84,11 @@ public @interface ExcelExportColumn {
     String dateFormat() default "yyyy/MM/dd";
 
     /**
+     * 数据格式
+     */
+    String format() default "";
+
+    /**
      * 字典编码
      */
     String dict () default "";
