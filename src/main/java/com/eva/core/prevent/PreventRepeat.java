@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 防重复注解
- * 防重复逻辑：默认情况下，记录请求地址、登录令牌和请求IP作为请求区分的因子，只有三者相同
+ * 防重复逻辑：默认情况下，记录请求地址、登录令牌和请求IP作为请求区分的因子，只有三者相同才视为是同一请求
  */
 @Inherited
 @Target(ElementType.METHOD)
