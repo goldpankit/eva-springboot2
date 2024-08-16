@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
   "label": "Eva4后端Java SpringBoot2版",
-  "version": "4.4.0.0",
+  "version": "4.4.0.2",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
@@ -21,13 +21,13 @@
     {
       "name": "初始化表结构",
       "type": "MySQL",
-      "content": "",
+      "content": "/sql/init/tables.sql",
       "contentType": "file"
     },
     {
       "name": "初始化基础数据",
       "type": "MySQL",
-      "content": "",
+      "content": "/sql/init/data.sql",
       "contentType": "file"
     }
   ],

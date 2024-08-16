@@ -70,6 +70,9 @@ public class MyBatisInterceptor implements Interceptor {
      * 处理新增和编辑语句
      */
     private void handleOperaStatement(Object target, String[]... fieldNames) throws Exception{
+        if (target == null) {
+            return;
+        }
         // 操作人
         for (String fieldName : fieldNames[0]) {
             Field operaUserField = ReflectionUtils.findField(target.getClass(), fieldName);
