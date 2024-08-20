@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
   "label": "Eva4后端Java SpringBoot2版",
-  "version": "4.4.0.2",
+  "version": "4.4.1.3",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
@@ -10,7 +10,11 @@
   "supportedDatabases": [
     "mysql"
   ],
-  "presetPlugins": [],
+  "presetPlugins": [
+    {
+      "name": "eva-springboot2-security"
+    }
+  ],
   "prices": [
     {
       "type": "FREE",
@@ -29,6 +33,18 @@
       "type": "MySQL",
       "content": "/sql/init/data.sql",
       "contentType": "file"
+    },
+    {
+      "name": "访问接口文档",
+      "type": "Markdown",
+      "content": "伊娃的接口文档支持使用系统账号进行认证。\n\n- 如果接口不需要登录即可调用，可直接访问[http://localhost:10010/doc.html](http://localhost:10010/doc.html)进行接口测试。\n- 如果接口需要登录后才可调用，可访问[http://localhost:10010/doc/auth.html](http://localhost:10010/doc/auth.html)进行登录后再测试。",
+      "contentType": "string"
+    },
+    {
+      "name": "构建前端工程",
+      "type": "Markdown",
+      "content": "前端工程推荐使用Vue3版本。如已构建，请忽略！\n[前往共建](http://www.goldpankit.com/space/service/install?space=Eva&service=vue3-options&major=4)",
+      "contentType": "string"
     }
   ],
   "unbuilds": [],
@@ -61,7 +77,7 @@
       "id": "wu19fr7v2cgg",
       "type": "variable",
       "name": "datasource",
-      "label": "数据源",
+      "label": "数据库",
       "inputType": "datasource",
       "required": true,
       "hidden": false,
@@ -73,7 +89,7 @@
   "translator": {
     "output": ".kit/translated",
     "filepath": "filepath = filepath\n  .replace(/com\\/eva/, '${basePackagePath}')\n\nreturn filepath",
-    "content": "content = content\n  .replace(/\\$\\{/g, '<#noparse>${</#noparse>')\n  .replace(/\\#\\{/g, '<#noparse>#{</#noparse>')\n\n// 全局处理\ncontent = content\n  .replace(/com\\.eva/g, '${basePackage}')\n\nreturn content"
+    "content": "content = content\n  .replace(/\\$\\{/g, '<#noparse>${</#noparse>')\n  .replace(/\\#\\{/g, '<#noparse>#{</#noparse>')\n\n// 全局处理\ncontent = content\n  .replace(/com\\.eva/g, '${basePackage}')\n\n// 修改数据库信息\nif (filename === 'application-config.yml') {\n  content = content\n    .replace('localhost:3306/eva4', '${datasource.host}:${datasource.port}/${datasource.schema}')\n    .replace('root', '${datasource.username}')\n    .replace('local@123', '${datasource.password}')\n}\n\nreturn content"
   },
   "settings": [],
   "introduce": "🇨🇳一套基于SpringBoot 2.x、MyBatis Plus和knife4j等技术的权限管理基础工程，可与任意eva系前端结合使用来完成权限系统的研发。",

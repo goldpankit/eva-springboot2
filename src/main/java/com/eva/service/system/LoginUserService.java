@@ -1,17 +1,12 @@
 package com.eva.service.system;
 
-import com.eva.core.constants.ResponseStatus;
-import com.eva.core.exception.BusinessException;
 import com.eva.core.model.LoginUserInfo;
 import com.eva.core.utils.Utils;
 import com.eva.dao.system.model.SystemPermission;
 import com.eva.dao.system.model.SystemRole;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -69,13 +64,5 @@ public class LoginUserService {
         }
     }
 
-    /**
-     * 退出登录
-     *
-     * @param request HttpServletRequest
-     */
-    public void logout (HttpServletRequest request) {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-    }
+    /* @kit position line */
 }
