@@ -1,7 +1,7 @@
 {
   "name": "eva-springboot",
   "label": "Eva4后端Java SpringBoot2版",
-  "version": "4.4.1.3",
+  "version": "4.4.1.5",
   "private": false,
   "receivable": false,
   "compiler": "freemarker",
@@ -13,6 +13,9 @@
   "presetPlugins": [
     {
       "name": "eva-springboot2-security"
+    },
+    {
+      "name": "eva-springboot2-local-cache"
     }
   ],
   "prices": [
@@ -81,7 +84,7 @@
       "inputType": "datasource",
       "required": true,
       "hidden": false,
-      "defaultValue": null,
+      "defaultValue": "54U1R9895QG4W0",
       "compiler": "static",
       "remark": "选择一个数据源，项目构建完成后将自动为您初始化数据库。"
     }
